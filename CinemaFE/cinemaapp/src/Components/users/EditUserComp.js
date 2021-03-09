@@ -12,7 +12,7 @@ import UserHeader from './header/UserHeader';
 import usersUtil from '../../Utils/usersUtil';
 
 function EditUserComp(props) {
-    console.log('1111111111 ')
+    console.log('1111111111 aaaaa')
     //const [userId, setUserId] = useState('');
     const [user, setUser] = useState();
     //console.log('1111111111aaaaa ', users)
