@@ -12,29 +12,19 @@ import UserHeader from './header/UserHeader';
 import usersUtil from '../../Utils/usersUtil';
 
 function EditUserComp(props) {
-    console.log('1111111111 aaaaa')
-    //const [userId, setUserId] = useState('');
     const [user, setUser] = useState();
-    //console.log('1111111111aaaaa ', users)
     const users = useSelector(state => state.users);
-    console.log('1111111111bbbbb ', users)
     const msg = useSelector(state => state.msg);
 
     useEffect(() => {
-        
-        console.log('2222222222222 ' , formik.values)
         let userId = props.match.params.id;
-        console.log('2222222222222aaaaa' , userId)
         let user = users.filter(u => u.id === userId)[0];
-        console.log('2222222222222bbbbb' , user)
         formik.values.firstName = user.firstName;
         formik.values.lastName = user.lastName;
         formik.values.username = user.username;
         formik.values.sessionTimeOut = user.sessionTimeOut;
         formik.values.permissions = user.permissions;
 
-        
-       // console.log('2222222222222bbb ' , formik.values)
         setUser(user);
         
     }, [])
@@ -93,88 +83,58 @@ function EditUserComp(props) {
                 values.updateMovies)
             }),
         onSubmit: async (values) => {
-           // console.log('cvb', values)
-            /*
-            let resp = await usersUtil.addUser(values);
-
-            let checkedPermissions = Object.keys(values.permissions).filter(p => values.permissions[p])
             
-            if(resp.success){
-                values.id = resp.id;
-                values.permissions = checkedPermissions;
-                dispatch({
-                    type: "AddUser",
-                    payload: values
-                })
-
-                dispatch({
-                    type: "UpdateMsg",
-                    payload: resp.msg
-                })
-
-                history.push('/users');
-            }
-            else{
-                dispatch({
-                    type: "UpdateMsg",
-                    payload: resp.msg
-                })
-            }
-            
-            */
         },
     });
 
-    const inputTextHandleChange = (e) =>{
-        //console.log(e.target.name);
-        //formik.handleChange(e);
-        console.log(formik.values);
-        let name = e.target.name;
-        formik.values[name] = e.target.value;
-        console.log('inside' + formik.values);
-    }
-
     const handleChange = (e) =>{
-        /*
         formik.handleChange(e);
         const {name, checked} = e.target;
 
-        formik.values.permissions[name] = checked;
+        let userPermissions = user.permissions;
 
-        if(name === 'createSubscriptions' || name === 'deleteSubscriptions' || name === 'updateSubscriptions'){
-            if(checked || (!checked && !formik.values.permissions.createSubscriptions && !formik.values.permissions.deleteSubscriptions && !formik.values.permissions.updateSubscriptions )){
-                formik.values.permissions.viewSubscriptions = checked;
+        if(user.permissions.includes(name) && !checked){
+            userPermissions = user.permissions.filter(p => p !== name)
+        }
+        else if(!user.permissions.includes(name) && checked){
+            userPermissions.push(name);
+        }
+        
+        if(name === 'Create Subscriptions' || name === 'Delete Subscriptions' || name === 'Update Subscriptions'){
+            if(checked){
+                userPermissions.push('View Subscriptions');
+            }
+            else if(!checked && !user.permissions.includes('Create Subscriptions') && !user.permissions.includes('Delete Subscriptions') && !user.permissions.includes('Update Subscriptions')){
+                userPermissions = user.permissions.filter(p => p !== 'View Subscriptions');
             }
         }
-        else if(name === 'createMovies' || name === 'deleteMovies' || name === 'updateMovies'){
-            if(checked || (!checked && !formik.values.permissions.createMovies && !formik.values.permissions.deleteMovies && !formik.values.updateMovies )){
-                formik.values.permissions.viewMovies = checked;
+        else if(name === 'Create Movies' || name === 'Delete Movies' || name === 'Update Movies'){
+            if(checked){
+                userPermissions.push('View Movies');
+            }
+            else if(!checked && !user.permissions.includes('Create Movies') && !user.permissions.includes('Delete Movies') && !user.permissions.includes('Update Movies')){
+                userPermissions = user.permissions.filter(p => p !== 'View Movies');
             }
         }
-        else if(name === 'viewSubscriptions'){
+        else if(name === 'View Subscriptions'){
             if(!checked){
-                formik.values.permissions.createSubscriptions = false;
-                formik.values.permissions.deleteSubscriptions = false;
-                formik.values.permissions.updateSubscriptions = false;
+                userPermissions = userPermissions.filter(p => (p !== 'Create Subscriptions' && p !== 'Delete Subscriptions' && p !== 'Update Subscriptions' ));
             }
         }
-        else if(name === 'viewMovies'){
+        else if(name === 'View Movies'){
             if(!checked){
-                formik.values.permissions.createMovies = false;
-                formik.values.permissions.deleteMovies = false;
-                formik.values.permissions.updateMovies = false;
+                userPermissions = userPermissions.filter(p => (p !== 'Create Movies' && p !== 'Delete Movies' && p !== 'Update Movies' ));
             }
         }
-        */
+
+        user.permissions = userPermissions;
+        
     }
 
     return(
         <React.Fragment>
              <UserHeader/>
-             {console.log('3333333333 ',user)}
-             {console.log('3333333333bbbb ',formik.values)}
-             {console.log('3333333333cccc ',formik.values)}
-            {msg}
+             {msg}
             <form onSubmit={formik.handleSubmit}>
 
             <label htmlFor='firstName'>First Name</label>
@@ -188,9 +148,7 @@ function EditUserComp(props) {
                 {formik.touched.firstName && formik.errors.firstName ? (
                     <div>{formik.errors.firstName}</div>
                 ) : null}
-
                 
-
                 <br/>
 
                 <label htmlFor='lastName'>Last Name</label>
@@ -198,7 +156,7 @@ function EditUserComp(props) {
                     id='lastName'
                     name='lastName'
                     type='text'
-                    onChange={inputTextHandleChange}
+                    onChange={formik.handleChange}
                     value={formik.values.lastName}
                 />
                 {formik.touched.lastName && formik.errors.lastName ? (
@@ -211,7 +169,7 @@ function EditUserComp(props) {
                     id='username'
                     name='username'
                     type='text'
-                    onChange={inputTextHandleChange}
+                    onChange={formik.handleChange}
                     value={formik.values.username}
                 />
                 {formik.touched.username && formik.errors.username ? (
@@ -224,7 +182,7 @@ function EditUserComp(props) {
                     id='sessionTimeOut'
                     name='sessionTimeOut'
                     type='text'
-                    onChange={inputTextHandleChange}
+                    onChange={formik.handleChange}
                     value={formik.values.sessionTimeOut}
                 />
                 {formik.touched.sessionTimeOut && formik.errors.sessionTimeOut ? (
@@ -237,12 +195,66 @@ function EditUserComp(props) {
                     
                 <FormGroup row>
                     <FormControlLabel
-                        control={<Checkbox checked={user ? (user.permissions.includes('View Subscriptions') ? true : false) : (false)}  onChange={handleChange} id='viewSubscriptions' name='viewSubscriptions' size='small' style ={{
+                        control={<Checkbox value={formik.values.permissions} checked={user ? (user.permissions.includes('View Subscriptions') ? true : false) : (false)}  onChange={handleChange} id='viewSubscriptions' name='View Subscriptions' size='small' style ={{
                             color: 'white', 
                             }}
                                 />}
                         label='View Subscriptions'
                     />
+
+<FormControlLabel
+                        control={<Checkbox value={formik.values.permissions} checked={user ? (user.permissions.includes('Create Subscriptions') ? true : false) : false} onChange={handleChange} id='createSubscriptions' name='Create Subscriptions' size='small' style ={{
+                            color: 'white', 
+                            }}
+                                />}
+                        label='Create Subscriptions'
+                    />
+                                        <FormControlLabel
+                        control={<Checkbox value={formik.values.permissions} checked={user ? (user.permissions.includes('Delete Subscriptions') ? true : false) : false} onChange={handleChange} id='deleteSubscriptions' name='Delete Subscriptions' size='small' style ={{
+                            color: 'white', 
+                            }}
+                                />}
+                        label='Delete Subscriptions'
+                    />
+                                        <FormControlLabel
+                        control={<Checkbox value={formik.values.permissions} checked={user ? (user.permissions.includes('Update Subscriptions') ? true : false) : false} onChange={handleChange} id='updateSubscriptions' name='Update Subscriptions' size='small' style ={{
+                            color: 'white', 
+                            }}
+                                />}
+                        label='Update Subscriptions'
+                    />
+                                        <FormControlLabel
+                        control={<Checkbox value={formik.values.permissions} checked={user ? (user.permissions.includes('View Movies') ? true : false) : false} onChange={handleChange} id='viewMovies' name='View Movies' size='small' style ={{
+                            color: 'white', 
+                            }}
+                                />}
+                        label='View Movies'
+                    />
+                                        <FormControlLabel
+                        control={<Checkbox value={formik.values.permissions} checked={user ? (user.permissions.includes('Crewate Movies') ? true : false) : false} onChange={handleChange} id='createMovies' name='Create Movies' size='small' style ={{
+                            color: 'white', 
+                            }}
+                                />}
+                        label='Create Movies'
+                    />
+                                        <FormControlLabel
+                        control={<Checkbox value={formik.values.permissions} checked={user ? (user.permissions.includes('Delete Movies') ? true : false) : false} onChange={handleChange} id='deleteMovies' name='Delete Movies' size='small' style ={{
+                            color: 'white', 
+                            }}
+                                />}
+                        label='Delete Movies'
+                    />
+                                        <FormControlLabel
+                        control={<Checkbox value={formik.values.permissions} checked={user ? (user.permissions.includes('Update Movies') ? true : false) : false} onChange={handleChange} id='updateMovies' name='Update Movies' size='small' style ={{
+                            color: 'white', 
+                            }}
+                                />}
+                        label='Update Movies'
+                    />
+                    {formik.touched.permissions && formik.errors.permissions ? (
+                        <div>{formik.errors.permissions}</div>
+                    ) : null}
+                
                 </FormGroup>
 
 

@@ -28,6 +28,7 @@ function UserComp(props) {
         }
     }
     return (
+        
         <div className='user'>
             name: {props.user.firstName} {props.user.lastName}<br/>
             usernme: {props.user.username}<br/>
