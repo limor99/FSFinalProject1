@@ -22,3 +22,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# data files
+CinemaWS/dataFiles/permissions.json
+CinemaWS/dataFiles/users.json

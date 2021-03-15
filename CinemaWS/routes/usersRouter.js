@@ -106,6 +106,28 @@ router.route('/:id').delete(async function(req, res){
     }
 })
 
+router.route('/').put(async function(req, res){
+    let updatedUser = req.body;
+  
+    let isUpdated = await usersBL.updateUser(updatedUser);
+
+    if(isUpdated){
+        let response = {
+            success : true,
+            msg : `User ${updatedUser.id} updated` 
+        }
+        res.status(200).json(response);
+    }
+    else{
+        let response = {
+            success : false,
+            msg : `An error ocuured while try to update user: ${updatedUser.id}` 
+        }
+        res.json(response);
+
+    }
+})
+
 
  
 router.route('/test').post(checkAuth, async function(req, res){

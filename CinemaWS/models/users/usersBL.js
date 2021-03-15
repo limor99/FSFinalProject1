@@ -155,18 +155,8 @@ exports.addNewUser = async function(user){
                 
         // 3. add new user to permisions.json file
 
-        let userPermissions = [];
-        user.permissions.viewSubscriptions ? userPermissions.push("View Subscriptions") : null;
-        user.permissions.createSubscriptions ? userPermissions.push("Create Subscriptions") : null;
-        user.permissions.deleteSubscriptions ? userPermissions.push("Delete Subscriptions") : null;
-        user.permissions.updateSubscriptions ? userPermissions.push("Update Subscriptions") : null;
-        user.permissions.viewMovies ? userPermissions.push("View Movies") : null;
-        user.permissions.createMovies ? userPermissions.push("Create Movies") : null;
-        user.permissions.deleteMovies ? userPermissions.push("Delete Movies") : null;
-        user.permissions.updateMovies ? userPermissions.push("Update Movies") : null;
-       
-        let newUserPermisions = { "id": createdUser.id,
-                                    "permissions": userPermissions
+    let newUserPermisions = { "id": createdUser.id,
+                                    "permissions": user.permissions
                                      }
         let isNewUserPermissionAddedToFile = await permissionFileDal.addUserPermissionToFile(newUserPermisions);
        
@@ -293,4 +283,59 @@ exports.deleteUser = async (userId) =>{
 
     return isDeleted;
 }
+
+/** update user with his data in users.json & permissions.json */
+exports.updateUser = async function(updateUser){
+    let isUpdate = false;
+    let isUpdateUser = false;
+    let isUpdateUserPermissions = false;
+    
+    let userToUpdate = {
+        "id" : updateUser.id,
+        "firstName" : updateUser.firstName,
+        "lastName" : updateUser.lastName,
+        "username" : updateUser.username,
+        "createdDate" : updateUser.createdDate,
+        "sessionTimeOut" : updateUser.sessionTimeOut
+    }
+
+    let users = await userFileDal.readUsersFromFile();
+
+    // 1. update the user.json
+    if(users){
+        let index = users.findIndex(user => user.id === userToUpdate.id);
+        users[index] = userToUpdate;
+        isUpdateUser = await userFileDal.writeUsersToFile(users);
+        
+        let userPermissionsToUpdate = {
+            "id" : updateUser.id,
+            "permissions" : updateUser.permissions
+        }
+
+        let usersPermissions = await permissionFileDal.readPermissions();
+        let indexPermossions = usersPermissions.findIndex(per => per.id === userPermissionsToUpdate.id);
+        usersPermissions[indexPermossions] = userPermissionsToUpdate;
+
+        isUpdateUserPermissions = await permissionFileDal.writePermissions(usersPermissions);
+
+        //3. update user in db
+        let userForDB = {
+            "username" : updateUser.username
+        }
+
+        let updateUserInDB = await User.findByIdAndUpdate(updateUser.id, userForDB);
+
+        if(isUpdateUser && isUpdateUserPermissions && updateUserInDB){
+            isUpdate = true;
+        }
+
+    }else{
+        console.log(`An error occured while try to update user: ${updateUser.id}: ${err}`);
+    }
+
+    return isUpdate;
+
+}
+
+
 

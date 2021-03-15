@@ -36,7 +36,9 @@ function loadFromSessionStorage(){
 
 const persistedState = loadFromSessionStorage();
 
-const appStore = createStore(reduser, persistedState);
+/*const appStore = createStore(reduser, persistedState,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());*/
+const appStore = createStore(reduser);
 
 appStore.subscribe(() => saveToSessionStorage(appStore.getState()));
 

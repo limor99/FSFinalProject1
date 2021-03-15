@@ -23,6 +23,11 @@ const deleteUser = async (id) =>{
     return resp.data;
 }
 
+const updateUser = async(updatedUser) =>{
+    let resp = await axios.put(usersUrl, updatedUser);
+    return resp.data;
+}
+
 const getUsers = async () =>{
     let resp = await axios.get(`${usersUrl}`);
     return resp.data;
@@ -38,4 +43,4 @@ const test = async (token) =>{
     return resp.data;
 }
 
-export default {login, createAccount, addUser, test, getUsers, deleteUser};
+export default {login, createAccount, addUser, test, getUsers, deleteUser, updateUser};

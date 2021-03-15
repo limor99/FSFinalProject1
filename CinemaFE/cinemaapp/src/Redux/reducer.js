@@ -37,6 +37,11 @@ function reducer(state = { users : [], movies : [{name : "aaa"}], counter: 0, us
 
             return {...state, users : updatedUsers};
 
+        case "UpdateUser":
+            let updatedUser = action.payload;
+            
+            return {...state, users : [...currentUsers, updatedUser]};
+
         case "UpdateMsg":
             let newMsg = action.payload;
              return {...state, msg: newMsg}
