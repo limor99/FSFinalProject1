@@ -10,6 +10,7 @@ function UsersComp() {
 
     return (
         <div>
+            {console.log(users.legnth)}
             <UserHeader/>
             <h1>All Users</h1>
             
