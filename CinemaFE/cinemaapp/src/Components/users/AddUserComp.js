@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -20,21 +20,14 @@ function AddUserComp() {
     const dispatch = useDispatch();
 
     const formik = useFormik({
+        /*enableReinitialize : true,*/
+        
         initialValues: {
             firstName: '',
             lastName: '',
             username: '',
             sessionTimeOut: 0,
-            permissions: {
-                viewSubscriptions: false,
-                createSubscriptions: false,
-                deleteSubscriptions: false,
-                updateSubscriptions: false,
-                viewMovies: false,
-                createMovies: false,
-                deleteMovies: false,
-                updateMovies: false
-            },
+            permissions: [],
         },
         validationSchema: Yup.object({
             firstName: Yup.string()
@@ -55,27 +48,16 @@ function AddUserComp() {
               .integer()
               .positive()
               .required('Required'),
-            permissions: Yup.object({
-                viewSubscriptions: Yup.boolean(),
-                createSubscriptions: Yup.boolean(),
-                deleteSubscriptions: Yup.boolean(),
-                updateSubscriptions: Yup.boolean(),
-                viewMovies: Yup.boolean(),
-                createMovies: Yup.boolean(),
-                deleteMovies: Yup.boolean(),
-                updateMovies: Yup.boolean()
-              }).test('permission-validation', 'Choose at list 1 permission', values => values.viewSubscriptions || values.createSubscriptions || 
-                values.deleteSubscriptions || values.updateSubscriptions || values.viewMovies || values.createMovies || values.deleteMovies ||
-                values.updateMovies)
+            permissions: Yup.array().min(1, 'Choose at list one permission')
+            
+            
             }),
         onSubmit: async (values) => {
             let resp = await usersUtil.addUser(values);
 
-            let checkedPermissions = Object.keys(values.permissions).filter(p => values.permissions[p])
-            
             if(resp.success){
                 values.id = resp.id;
-                values.permissions = checkedPermissions;
+                
                 dispatch({
                     type: "AddUser",
                     payload: values
@@ -101,51 +83,62 @@ function AddUserComp() {
 
     const handleChange = (e) =>{
         formik.handleChange(e);
-        const {name, checked} = e.target;
+        const {name, checked, value} = e.target;
+        let userPermissions = formik.values.permissions;
 
-        formik.values.permissions[name] = checked;
+       // console.log('name, checked' , name, checked, value);
+      //  console.log('values' , formik.values);
 
-        //let permissionsToUpdate = {[name]: checked}
-        
         if(name === 'createSubscriptions' || name === 'deleteSubscriptions' || name === 'updateSubscriptions'){
-            if(checked || (!checked && !formik.values.permissions.createSubscriptions && !formik.values.permissions.deleteSubscriptions && !formik.values.permissions.updateSubscriptions )){
-                formik.values.permissions.viewSubscriptions = checked;
-                //permissionsToUpdate = { ...permissionsToUpdate, 'viewSubscriptions': checked}
+            if(checked){
+                userPermissions = [...userPermissions, value];
+
+                if(!userPermissions.includes('View Subscriptions')){
+                    userPermissions = [...userPermissions, 'View Subscriptions'];
+                }
+            }
+            else{
+                userPermissions = userPermissions.filter(p => p !== value);
+                if(!userPermissions.includes('Create Subscriptions') && !userPermissions.includes('Delete Subscriptions') && !userPermissions.includes('Update Subscriptions')){
+                    userPermissions = userPermissions.filter(p => p !== 'View Subscriptions');
+                }
             }
         }
         else if(name === 'createMovies' || name === 'deleteMovies' || name === 'updateMovies'){
-            if(checked || (!checked && !formik.values.permissions.createMovies && !formik.values.permissions.deleteMovies && !formik.values.updateMovies )){
-                formik.values.permissions.viewMovies = checked;
-                //permissionsToUpdate = { ...permissionsToUpdate, 'viewMovies': checked}
-            }
+            if(checked){
+                userPermissions = [...userPermissions, value];
 
+                if(!userPermissions.includes('View Movies')){
+                    userPermissions = [...userPermissions, 'View Movies'];
+                }
+            }
+            else{
+                userPermissions = userPermissions.filter(p => p !== value);
+                if(!userPermissions.includes('Create Movies') && !userPermissions.includes('Delete Movies') && !userPermissions.includes('Update Movies')){
+                    userPermissions = userPermissions.filter(p => p !== 'View Movies');
+                }
+            }
         }
         else if(name === 'viewSubscriptions'){
-            if(!checked){
-                formik.values.permissions.createSubscriptions = false;
-                formik.values.permissions.deleteSubscriptions = false;
-                formik.values.permissions.updateSubscriptions = false;
-
-                /*let cancelCheckedPermissions = {createSubscriptions : false,
-                                                deleteSubscriptions : false,
-                                                updateSubscriptions : false}
-
-                permissionsToUpdate = { ...permissionsToUpdate, ...cancelCheckedPermissions }*/
+            if(checked){
+                userPermissions = [...userPermissions, value];
+            }
+            else{
+                userPermissions = userPermissions.filter(p => p.indexOf('S') === -1);
             }
         }
         else if(name === 'viewMovies'){
-            if(!checked){
-                formik.values.permissions.createMovies = false;
-                formik.values.permissions.deleteMovies = false;
-                formik.values.permissions.updateMovies = false;
+            if(checked){
+                userPermissions = [...userPermissions, value];
 
-               /* let cancelCheckedPermissions = {createMovies : false,
-                                                deleteMovies : false,
-                                                updateMovies : false}
-
-                permissionsToUpdate = { ...permissionsToUpdate, ...cancelCheckedPermissions }*/
+            }
+            else{
+                userPermissions = userPermissions.filter(p => p.indexOf('M') === -1);
             }
         }
+
+        formik.setFieldValue('permissions', userPermissions);
+       // console.log('values' , formik.values);
     }
 
     return(
@@ -211,69 +204,76 @@ function AddUserComp() {
                     
                 <FormGroup row>
                     <FormControlLabel
-                        control={<Checkbox value={formik.values.permissions} checked={formik.values.permissions.viewSubscriptions}  onChange={handleChange} id='viewSubscriptions' name='viewSubscriptions' size='small' style ={{
+                        control={<Checkbox checked={formik.values.permissions.includes('View Subscriptions')}  onChange={handleChange} id='viewSubscriptions' name='viewSubscriptions' value='View Subscriptions' size='small' style ={{
                             color: 'white', 
                             }}
                                 />}
                         label='View Subscriptions'
                     />
+
                     <FormControlLabel
-                        control={<Checkbox value={formik.values.permissions} checked={formik.values.permissions.createSubscriptions} onChange={handleChange} id='createSubscriptions' name='createSubscriptions' size='small' style ={{
+                        control={<Checkbox checked={formik.values.permissions.includes('Create Subscriptions')} onChange={handleChange} id='createSubscriptions' name='createSubscriptions' value='Create Subscriptions' size='small' style ={{
                             color: 'white', 
                             }}
                                 />}
                         label='Create Subscriptions'
                     />
-                                        <FormControlLabel
-                        control={<Checkbox value={formik.values.permissions} checked={formik.values.permissions.deleteSubscriptions} onChange={handleChange} id='deleteSubscriptions' name='deleteSubscriptions' size='small' style ={{
+
+                    <FormControlLabel
+                        control={<Checkbox checked={formik.values.permissions.includes('Delete Subscriptions')} onChange={handleChange} id='deleteSubscriptions' name='deleteSubscriptions' value='Delete Subscriptions' size='small' style ={{
                             color: 'white', 
                             }}
                                 />}
                         label='Delete Subscriptions'
                     />
-                                        <FormControlLabel
-                        control={<Checkbox value={formik.values.permissions} checked={formik.values.permissions.updateSubscriptions} onChange={handleChange} id='updateSubscriptions' name='updateSubscriptions' size='small' style ={{
+
+                    <FormControlLabel
+                        control={<Checkbox checked={formik.values.permissions.includes('Update Subscriptions')} onChange={handleChange} id='updateSubscriptions' name='updateSubscriptions' value='Update Subscriptions' size='small' style ={{
                             color: 'white', 
                             }}
                                 />}
                         label='Update Subscriptions'
                     />
-                                        <FormControlLabel
-                        control={<Checkbox value={formik.values.permissions} checked={formik.values.permissions.viewMovies} onChange={handleChange} id='viewMovies' name='viewMovies' size='small' style ={{
+
+                    <FormControlLabel
+                        control={<Checkbox checked={formik.values.permissions.includes('View Movies')} onChange={handleChange} id='viewMovies' name='viewMovies' value='View Movies' size='small' style ={{
                             color: 'white', 
                             }}
                                 />}
                         label='View Movies'
                     />
-                                        <FormControlLabel
-                        control={<Checkbox value={formik.values.permissions} checked={formik.values.permissions.createMovies} onChange={handleChange} id='createMovies' name='createMovies' size='small' style ={{
+
+                    <FormControlLabel
+                        control={<Checkbox checked={formik.values.permissions.includes('Create Movies')} onChange={handleChange} id='createMovies' name='createMovies' value='Create Movies' size='small' style ={{
                             color: 'white', 
                             }}
                                 />}
                         label='Create Movies'
                     />
-                                        <FormControlLabel
-                        control={<Checkbox value={formik.values.permissions} checked={formik.values.permissions.deleteMovies} onChange={handleChange} id='deleteMovies' name='deleteMovies' size='small' style ={{
+
+                    <FormControlLabel
+                        control={<Checkbox checked={formik.values.permissions.includes('Delete Movies')} onChange={handleChange} id='deleteMovies' name='deleteMovies' value='Delete Movies' size='small' style ={{
                             color: 'white', 
                             }}
                                 />}
                         label='Delete Movies'
                     />
-                                        <FormControlLabel
-                        control={<Checkbox value={formik.values.permissions} checked={formik.values.permissions.updateMovies} onChange={handleChange} id='updateMovies' name='updateMovies' size='small' style ={{
+
+                    <FormControlLabel
+                        control={<Checkbox checked={formik.values.permissions.includes('Update Movies')} onChange={handleChange} id='updateMovies' name='updateMovies' value='Update Movies' size='small' style ={{
                             color: 'white', 
                             }}
                                 />}
                         label='Update Movies'
                     />
-                    {formik.touched.permissions && formik.errors.permissions ? (
-                        <div>{formik.errors.permissions}</div>
-                    ) : null}
-                
                 </FormGroup>
-
+                
+                {formik.touched.permissions && formik.errors.permissions ? (
+                    <div>{formik.errors.permissions}</div>
+                ) : null}
 
                 <button type='submit'>Submit</button>
+                <button><Link to="/users">Cancel</Link></button>
             </form>
         </React.Fragment>
     )
