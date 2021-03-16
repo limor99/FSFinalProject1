@@ -1,20 +1,23 @@
 import { act } from '@testing-library/react';
 import movieUtil from '../../src/Utils/movieUtil';
 
-function reducer(state = { users : [], movies : [{name : "aaa"}], counter: 0, userFullName: '', msg: ''}, action){
+function reducer(state = { users : [], movies : [], counter: 0, userFullName: '', msg: ''}, action){
     let currentUsers = state.users;
     let newUsersArr = null;
+    
+    let currentMovies = state.movies;
+    let newMoviesArr = null;
 
     switch (action.type){
         case "LoadData":
-            let movies = action.payload;
+         //   let movies = action.payload;
            // let movies3 = movies.slice(0, 2);
           // console.log(" mpvies in payload")
 
            // console.table(movies);
 
-                let currentMovies = state.movies;
-                currentMovies = currentMovies.concat(movies)
+         //       let currentMovies = state.movies;
+           //     currentMovies = currentMovies.concat(movies)
             //    console.log("all movies after we load")
              //   console.log(currentMovies)
 
@@ -24,6 +27,12 @@ function reducer(state = { users : [], movies : [{name : "aaa"}], counter: 0, us
             newUsersArr = [...currentUsers, ...users];
 
             return {...state, users : newUsersArr};
+
+        case "LoadMovies":
+            let movies = action.payload;
+            newMoviesArr = [...currentMovies, ...movies];
+
+            return {...state, movies : newMoviesArr};
         
         case "AddUser":
             let newUser = action.payload;
@@ -39,8 +48,12 @@ function reducer(state = { users : [], movies : [{name : "aaa"}], counter: 0, us
 
         case "UpdateUser":
             let updatedUser = action.payload;
+            let userToUpdateIndx = currentUsers.findIndex(user => user.id === action.payload.id)
+            if(userToUpdateIndx > -1){
+                currentUsers[userToUpdateIndx] = updatedUser
+            }
             
-            return {...state, users : [...currentUsers, updatedUser]};
+            return {...state, users : currentUsers};
 
         case "UpdateMsg":
             let newMsg = action.payload;

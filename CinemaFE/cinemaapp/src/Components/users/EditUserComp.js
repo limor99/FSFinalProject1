@@ -12,7 +12,7 @@ import UserHeader from './header/UserHeader';
 import usersUtil from '../../Utils/usersUtil';
 
 function EditUserComp(props) {
-    const [user, setUser] = useState();
+    const [user, setUser] = useState(null);
     const users = useSelector(state => state.users);
     const msg = useSelector(state => state.msg);
 
@@ -24,7 +24,6 @@ function EditUserComp(props) {
 
         fields.forEach(field => formik.setFieldValue(field, user[field]));
 
-console.log('inside useeffect33', formik.values.permissions)
         setUser(user);
         
     }, [])
@@ -64,7 +63,6 @@ console.log('inside useeffect33', formik.values.permissions)
             permissions: Yup.array().min(1, 'Choose at list one permission')
             }),
         onSubmit: async (values) => {
-            //console.log('dfgdfg' , values)
             let updatedUser = {
                 'id': user.id,
                 'firstName' : values.firstName,
@@ -103,9 +101,6 @@ console.log('inside useeffect33', formik.values.permissions)
         formik.handleChange(e);
         const {name, checked, value} = e.target;
         let userPermissions = formik.values.permissions;
-
-        console.log('name, checked' , name, checked, value);
-        console.log('values' , formik.values);
 
         if(name === 'createSubscriptions' || name === 'deleteSubscriptions' || name === 'updateSubscriptions'){
             if(checked){

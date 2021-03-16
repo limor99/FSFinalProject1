@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-
 import './App.css';
 
 import { Route, Switch } from 'react-router-dom';
@@ -22,45 +21,40 @@ import permissions from './Components/customField/PermossionComp';
 import permissions1 from './Components/customField/PermossionComp1';
 import usersUtil from './Utils/usersUtil';
 
-
-
-
 function App() {
+  const users = useSelector(state => state.users);
+
   const dispatch = useDispatch();
     const userFullName = useSelector(state => state.userFullName);
- // const [userFullName, setUserFullName] = useState('');
+    
     console.log('App: ')
 
-  useEffect(() => {
-    // Using an IIFE
-    (async function anyNameFunction() {
-      let respUser = await usersUtil.getUsers();
+    useEffect(() => {
+      // Using an IIFE
+      (async function anyNameFunction() {
+        if(users.length === 0){
+          let respUser = await usersUtil.getUsers();
 
-      if(respUser != null){
+          if(respUser != null){
+            dispatch({
+              type: "LoadUsers",
+              payload: respUser
+            })
+    
+          }
+        }
+
+        let resp = await movieUtil.loadMovies();
+        let movies = resp.movies;
+        let movie3 = movies.slice(0,2)
+
         dispatch({
-          type: "LoadUsers",
-          payload: respUser
+          type : "LoadData",
+          payload : movie3
         })
+      })();
+    }, []);
 
-      }
-      let resp = await movieUtil.loadMovies();
-      let movies = resp.movies;
-      let movie3 = movies.slice(0,2)
-
-      dispatch({
-        type : "LoadData",
-        payload : movie3
-      })
-    })();
-  }, []);
-
- /* const updateFullName = (fullName) =>{
-    //let updatedFullName = fullName;
-    setUserFullName(fullName);
-      
-  }
-
-*/
   return (
     <div className="App">
         {userFullName !== '' ? <Header userFullName={userFullName} /> : userFullName}

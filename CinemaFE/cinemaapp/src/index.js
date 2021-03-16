@@ -6,49 +6,32 @@ import reportWebVitals from './reportWebVitals';
 
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import reduser from '../src/Redux/reducer';
+import reducer from '../src/Redux/reducer';
+
+import { persistStore, persistReducer } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+import storage from 'redux-persist/lib/storage';
+
 
 import { BrowserRouter} from 'react-router-dom';
 
-function saveToSessionStorage(state){
-  try{
-      const serializedState = JSON.stringify(state);
-      sessionStorage.setItem('state', serializedState);
-  }
-  catch(e){
-      console.log(`An error occured while try to save store in sessionStorage ${e}`);
-  }
-}
+const persistConfig = {
+  key: 'root',
+  storage, // which reducer want to store
+  
+};
+const pReducer = persistReducer(persistConfig, reducer);
 
-function loadFromSessionStorage(){
-  try{
-      const serializedState = sessionStorage.getItem('state');
-      if(serializedState === null){
-        return undefined;
-      }
-      return JSON.parse(serializedState);
-  }
-  catch(e){
-    console.log(`An error occured while try to load the store from sessionStorage ${e}`);
-    return undefined;
-  }
-}
-
-const persistedState = loadFromSessionStorage();
-
-/*const appStore = createStore(reduser, persistedState,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());*/
-const appStore = createStore(reduser);
-
-appStore.subscribe(() => saveToSessionStorage(appStore.getState()));
+const appStore = createStore(pReducer);
+const persistor = persistStore(appStore);
 
 ReactDOM.render(
   <Provider store={ appStore }>
-  <BrowserRouter >
-    
-      <App />
-    
-  </BrowserRouter>
+    <PersistGate loading={null} persistor={persistor}>
+      <BrowserRouter >
+        <App />
+      </BrowserRouter>
+    </PersistGate>
   </Provider>,
   document.getElementById('root')
 );
