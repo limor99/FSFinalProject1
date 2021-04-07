@@ -8,7 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import UserHeader from './header/UserHeader';
+import UserMenu from './menu/UserMenu';
 import usersUtil from '../../Utils/usersUtil';
 
 function AddUserComp() {
@@ -143,7 +143,7 @@ function AddUserComp() {
 
     return(
         <React.Fragment>
-             <UserHeader/>
+             <UserMenu/>
             {msg}
             <form onSubmit={formik.handleSubmit}>
                 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import UserHeader from './header/UserHeader';
+import UserMenu from './menu/UserMenu';
 import User from './UserComp';
 
 function UsersComp() {
@@ -11,7 +11,7 @@ function UsersComp() {
     return (
         <div>
             {console.log(users.legnth)}
-            <UserHeader/>
+            <UserMenu/>
             <h1>All Users</h1>
             
             {msg}

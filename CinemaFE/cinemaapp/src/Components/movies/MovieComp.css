@@ -1,0 +1,13 @@
+.movie{
+    border: 1px solid red;
+}
+
+.imgSize{
+    width: 50px;
+    height: 100px;
+}
+
+.TextField{
+    color: red!important;
+    background-color: white;
+}

@@ -1,21 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-function MoviesComp(props) {
-    
+import MovieComp from './MovieComp';
+import MovieMenu from './menu/MovieMenu';
+
+function MoviesComp() {
     const movies = useSelector( state => state.movies);
-    //const counter = useSelector( state => state.counter);
-    //console.log('movies: ' + movies.length)
-        
+
+    const [searchMovie, setSearchMovie] = useState('');
+    const [movieResult, setMoviesResult] = useState(movies)
+    
+    const search = (e) =>{
+        let search = e.target.value;
+
+        let result = movies.filter(m => m.name.toLowerCase().indexOf(search.toLowerCase()) > -1);
+        setMoviesResult(result);
+    }    
+
     return (
         
       <div className="App">
+        <MovieMenu/>
+        <input type="text"  onChange={e => search(e)}></input>
+
         All Movies:
 
         <div>
             {
-                movies.map((m, index) =>{
-                    return <li key={index} >{m.name}</li>
+                movieResult.map((movie, index) =>{
+                    return <MovieComp key={index} movie={movie}/>
                 })
             }
 

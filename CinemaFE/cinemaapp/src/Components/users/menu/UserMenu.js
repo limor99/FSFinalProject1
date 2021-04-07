@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory, Link } from 'react-router-dom';
 
-function UserHeader() {
+function UserMenu() {
     const history = useHistory();
 
 
@@ -16,4 +16,4 @@ function UserHeader() {
     )
 }
 
-export default UserHeader
+export default UserMenu

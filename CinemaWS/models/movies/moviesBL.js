@@ -48,12 +48,18 @@ exports.addMovie = async function(movie){
 
     try{
         response = await moviesDAL.addMovie(movie);
-        addedMovie = response.data;
+        
     }
     catch(err){
         console.log(`An error occured while try to add movie: ${movie.name} : ${err}`);
+        response = {
+            data: {
+                success : false,
+                msg: `An error occured while try to add movie: ${movie.name}`
+            }
+        }
     }
-
+    addedMovie = response.data;
     return addedMovie;
 }
 

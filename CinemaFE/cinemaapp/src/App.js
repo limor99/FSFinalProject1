@@ -16,6 +16,9 @@ import Users from './Components/users/UsersComp';
 import AddUser from './Components/users/AddUserComp';
 import EditUser from './Components/users/EditUserComp';
 import createAccount from './Components/users/CreateAccountComp';
+import AddMovie from './Components/movies/AddMovieComp';
+import EditMovie from './Components/movies/EditMovieComp';
+
 
 import permissions from './Components/customField/PermossionComp';
 import permissions1 from './Components/customField/PermossionComp1';
@@ -23,6 +26,7 @@ import usersUtil from './Utils/usersUtil';
 
 function App() {
   const users = useSelector(state => state.users);
+  const movies = useSelector(state => state.movies);
 
   const dispatch = useDispatch();
     const userFullName = useSelector(state => state.userFullName);
@@ -44,14 +48,16 @@ function App() {
           }
         }
 
-        let resp = await movieUtil.loadMovies();
-        let movies = resp.movies;
-        let movie3 = movies.slice(0,2)
+        if(movies.length === 0){
+          let resp = await movieUtil.loadMovies();
+          let movies = resp.movies;
+         // let movie3 = movies.slice(0,2)
 
-        dispatch({
-          type : "LoadData",
-          payload : movie3
-        })
+          dispatch({
+            type : "LoadMovies",
+            payload : movies
+          })
+        }
       })();
     }, []);
 
@@ -65,6 +71,8 @@ function App() {
         <Route path="/createAccount" component={createAccount}/>
         <Route path="/main" component={Main}/>
         <Route path="/movies" component={Movies}/>
+        <Route path="/addMovie" component={AddMovie}/>
+        <Route path="/movie/:id" component={EditMovie}/>
         <Route path="/Subscriptions" component={Members}/>
         <Route path="/users" component={Users}/>
         <Route path="/addUser" component={AddUser}/>

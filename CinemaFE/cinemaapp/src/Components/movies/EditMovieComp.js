@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -32,16 +32,19 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-function AddMovieComp() {
-    const [msg, setMsg] = useState('')
+function EditMovieComp(props) {
+    const [msg, setMsg] = useState('');
+    const [movie, setMovie] = useState(null);
+    const movies = useSelector(state => state.movies);
+
     const classes = useStyles();
 
     const dispatch = useDispatch();
     const history = useHistory();
-   
+
     const formik = useFormik({
         initialValues: {
-            name: '',
+            name: movie != null ? movie.name : '',
             generes: '',
             imageUrl: '',
             premiered: '',
@@ -98,33 +101,37 @@ function AddMovieComp() {
             
             // setMsg(resp.msg);
         },
-              
-
-              
-
     });
 
-    const handleChange = (e) =>{
-        formik.handleChange(e);
-        alert(e.target.value)
-        console.log(formik.values.name)
+    useEffect(() => {
+        let movieId = props.match.params.id;
+        let movie = movies.filter(m => m._id === movieId)[0];
+
+        //let fields = ['firstName', 'lastName', 'username', 'sessionTimeOut', 'permissions'];
+
+        //fields.forEach(field => formik.setFieldValue(field, user[field]));
+
+        setMovie(movie);
         
-    }
+    }, [])
 
     return (
+        
         <React.Fragment>
             <MovieMenu/>
             {msg}
+            name: {props.match.params.name}
             <form onSubmit={formik.handleSubmit}>
                 <label htmlFor="name">Name</label>
 
                 <input
                     id="name"
+                    name="name"
                     type="text"
                     {...formik.getFieldProps('name')}
+                    value={formik.values.name}
                 />
 
-              
                 {formik.touched.name && formik.errors.name ? (
                     <div>{formik.errors.name}</div>
                 ) : null}
@@ -186,4 +193,4 @@ function AddMovieComp() {
     )
 }
 
-export default AddMovieComp
+export default EditMovieComp

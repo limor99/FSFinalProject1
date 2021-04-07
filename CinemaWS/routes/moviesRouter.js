@@ -24,7 +24,7 @@ router.route('/:id').put(async function(req, res){
 })
 
 router.route('/').post(async function(req, res){
-    let addedMovie = req.body.movie;
+    let addedMovie = req.body;
 
     let data = await moviesBL.addMovie(addedMovie);
 

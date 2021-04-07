@@ -7,4 +7,23 @@ const loadMovies = async() =>{
     return resp.data;
 }
 
-export default { loadMovies };
+const addMovie = async (newMovie) =>{
+    let resp = {};
+    try{
+        resp = await axios.post(moviesUrl, newMovie);
+        
+    }
+    catch(err){
+        console.log(`An Error occured: ${err}`);
+        resp.data = {
+            succrss : false,
+            msg : 'An Error occured'
+        }
+
+        console.log(resp.data)
+    }
+
+    return resp.data;
+}
+
+export default { loadMovies, addMovie };
