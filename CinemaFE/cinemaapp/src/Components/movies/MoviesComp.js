@@ -7,7 +7,7 @@ import MovieMenu from './menu/MovieMenu';
 function MoviesComp() {
     const movies = useSelector( state => state.movies);
 
-    const [searchMovie, setSearchMovie] = useState('');
+        const [searchMovie, setSearchMovie] = useState('');
     const [movieResult, setMoviesResult] = useState(movies)
     
     const search = (e) =>{

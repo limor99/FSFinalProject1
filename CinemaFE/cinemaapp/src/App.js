@@ -5,7 +5,7 @@ import './App.css';
 
 import { Route, Switch } from 'react-router-dom';
 
-import movieUtil from '../src/Utils/movieUtil';
+
 import Login from '../src/Components/LoginComp';
 import Main from './Components/MainComp';
 import Welcome from './Components/WelcomeComp';
@@ -23,32 +23,33 @@ import EditMovie from './Components/movies/EditMovieComp';
 import permissions from './Components/customField/PermossionComp';
 import permissions1 from './Components/customField/PermossionComp1';
 import usersUtil from './Utils/usersUtil';
+import movieUtil from '../src/Utils/movieUtil';
+import memberUtil from '../src/Utils/memberUtil';
 
 function App() {
+
   const users = useSelector(state => state.users);
   const movies = useSelector(state => state.movies);
+  const members = useSelector(state => state.nenbers);
 
   const dispatch = useDispatch();
-    const userFullName = useSelector(state => state.userFullName);
+  const userFullName = useSelector(state => state.userFullName);
     
-    console.log('App: ')
+  useEffect(() => {
+    // Using an IIFE
+    (async function anyNameFunction() {
+      if(users.length === 0){
+        let respUser = await usersUtil.getUsers();
 
-    useEffect(() => {
-      // Using an IIFE
-      (async function anyNameFunction() {
-        if(users.length === 0){
-          let respUser = await usersUtil.getUsers();
-
-          if(respUser != null){
-            dispatch({
-              type: "LoadUsers",
-              payload: respUser
-            })
-    
-          }
+        if(respUser != null){
+          dispatch({
+            type: "LoadUsers",
+            payload: respUser
+          })
         }
+      }
 
-        if(movies.length === 0){
+      if(movies.length === 0){
           let resp = await movieUtil.loadMovies();
           let movies = resp.movies;
          // let movie3 = movies.slice(0,2)
@@ -56,6 +57,16 @@ function App() {
           dispatch({
             type : "LoadMovies",
             payload : movies
+          })
+        }
+
+        if(members.length === 0){
+          let resp = await memberUtil.loadMembers();
+          let members = resp.members;
+          
+          dispatch({
+            type : "LoadMembers",
+            payload : members
           })
         }
       })();

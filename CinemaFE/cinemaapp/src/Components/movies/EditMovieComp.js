@@ -44,8 +44,8 @@ function EditMovieComp(props) {
 
     const formik = useFormik({
         initialValues: {
-            name: movie != null ? movie.name : '',
-            generes: '',
+            name: '',
+            genres: '',
             imageUrl: '',
             premiered: '',
             
@@ -55,7 +55,7 @@ function EditMovieComp(props) {
               .min(2, 'Too Short!')
               .max(50, 'Too Long!')
               .required('Required'),
-            generes: Yup.string()
+              genres: Yup.string()
               .min(3, 'Too Short!')
               .max(50, 'Too Long!')
               .required('Required'),
@@ -69,9 +69,11 @@ function EditMovieComp(props) {
               .required('Required'),
         }),
         onSubmit: async (values) => {
-            let addedMovie = {
+            let genres = values.genres.split(',');
+            let updatedMovie = {
+                _id: props.match.params.id,
                 name : values.name,
-                generes : values.generes,
+                genres : genres,
                 image : {
                     medium : values.imageUrl,
                     original : ''
@@ -79,20 +81,18 @@ function EditMovieComp(props) {
                 premiered : values.premiered
             }
 
-            let resp = await moviesUtil.addMovie(values)
-            //console.log(resp.data)
+            let resp = await moviesUtil.updateMovie(updatedMovie);
+            console.log(resp.data)
 
             if(resp.success){
-                addedMovie._id = resp.movieId;
-                
                 dispatch({
-                    type: "AddMovie",
-                    payload: addedMovie
+                    type: "UpdateMovie",
+                    payload: updatedMovie
                 })
-                formik.resetForm();
+                
                 setMsg(resp.msg);
 
-                //history.push('/movies');
+                history.push('/movies');
             }
             else{
                 setMsg(resp.msg);
@@ -106,12 +106,24 @@ function EditMovieComp(props) {
     useEffect(() => {
         let movieId = props.match.params.id;
         let movie = movies.filter(m => m._id === movieId)[0];
+        console.log(movie)
 
-        //let fields = ['firstName', 'lastName', 'username', 'sessionTimeOut', 'permissions'];
+        let fields = ['name', 'genres', 'imageUrl', 'premiered'];
 
-        //fields.forEach(field => formik.setFieldValue(field, user[field]));
+        fields.forEach(field => {
+                if(field === 'imageUrl'){
+                    formik.setFieldValue(field, movie.image.medium);
+                }
+                else if(field === 'premiered'){
+                    formik.setFieldValue(field, movie[field].slice(0, 10));
+                }
+                else{
+                    formik.setFieldValue(field, movie[field]);
+                }
+            }
+        );
 
-        setMovie(movie);
+        //setMovie(movie);
         
     }, [])
 
@@ -120,7 +132,7 @@ function EditMovieComp(props) {
         <React.Fragment>
             <MovieMenu/>
             {msg}
-            name: {props.match.params.name}
+            
             <form onSubmit={formik.handleSubmit}>
                 <label htmlFor="name">Name</label>
 
@@ -138,14 +150,16 @@ function EditMovieComp(props) {
 
                 <br/>
 
-                <label htmlFor="generes">Generes</label>
+                <label htmlFor="genres">Genres</label>
                 <input
-                    id="generes"
+                    id="genres"
+                    name="genres"
                     type="text"
-                    {...formik.getFieldProps('generes')}
+                    {...formik.getFieldProps('genres')}
+                    value={formik.values.genres}
                 />
-                {formik.touched.generes && formik.errors.generes ? (
-                    <div>{formik.errors.generes}</div>
+                {formik.touched.genres && formik.errors.genres ? (
+                    <div>{formik.errors.genres}</div>
                 ) : null}
 
                 <br/>
@@ -155,6 +169,7 @@ function EditMovieComp(props) {
                     id="imageUrl"
                     type="text"
                     {...formik.getFieldProps('imageUrl')}
+                    value={formik.values.imageUrl}
                 />
                 {formik.touched.imageUrl && formik.errors.imageUrl ? (
                     <div>{formik.errors.imageUrl}</div>
@@ -167,8 +182,10 @@ function EditMovieComp(props) {
                     id="premiered"
                     label="Premiered"
                     type="date"
+                    format={'dd/mm/yyyy'}
                     onChange={formik.handleChange}
                     {...formik.getFieldProps('premiered')}
+                    value={formik.values.premiered}
                     
                     
                     className={classes.input}

@@ -10,8 +10,8 @@ exports.getMovieById = function(id){
     return axios.get(`${moviesWSUrl}${id}`);
 }
 
-exports.updateMovie = function(movieId ,movie){
-    return axios.put(`${moviesWSUrl}${movieId}`, movie);
+exports.updateMovie = function(movie){
+    return axios.put(`${moviesWSUrl}${movie._id}`, movie);
 }
 
 exports.addMovie = function(movie){

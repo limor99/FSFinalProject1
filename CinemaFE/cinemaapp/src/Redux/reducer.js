@@ -1,12 +1,15 @@
 import { act } from '@testing-library/react';
 import movieUtil from '../../src/Utils/movieUtil';
 
-function reducer(state = { users : [], movies : [], counter: 0, userFullName: '', msg: ''}, action){
+function reducer(state = { users : [], movies : [], members : [], counter: 0, userFullName: '', msg: ''}, action){
     let currentUsers = state.users;
     let newUsersArr = null;
     
     let currentMovies = state.movies;
     let newMoviesArr = null;
+    
+    let currentMembers = state.members;
+    let newMembersArr = null;
 
     switch (action.type){
         case "LoadData":
@@ -33,6 +36,12 @@ function reducer(state = { users : [], movies : [], counter: 0, userFullName: ''
             newMoviesArr = [...currentMovies, ...movies];
 
             return {...state, movies : newMoviesArr};
+
+        case "LoadMembers":
+            let members = action.payload;
+            newMembersArr = [...currentMembers, ...members];
+
+            return {...state, members : newMembersArr};
         
         case "AddUser":
             let newUser = action.payload;
@@ -61,6 +70,21 @@ function reducer(state = { users : [], movies : [], counter: 0, userFullName: ''
 
             return {...state, movies : newMoviesArr};
 
+        case "UpdateMovie":
+            let updatedMovie = action.payload;
+            let movieToUpdateIndx = currentMovies.findIndex(movie => movie._id === updatedMovie._id)
+            if(movieToUpdateIndx > -1){
+                currentMovies[movieToUpdateIndx] = updatedMovie;
+            }
+            
+            return {...state, movies : currentMovies};
+
+        case "DeleteMovie":
+            let movieId = action.payload;
+            let updatedMovies = currentMovies.filter(m => m._id !== movieId);
+    
+            return {...state, movies : updatedMovies};
+        
         case "UpdateMsg":
             let newMsg = action.payload;
              return {...state, msg: newMsg}

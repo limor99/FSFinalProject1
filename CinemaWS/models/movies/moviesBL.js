@@ -28,11 +28,11 @@ exports.getMovieById = async function(id){
     return movie;
 }
 
-exports.updateMovie = async function(id, movie){
+exports.updateMovie = async function(movie){
     let updateMovie = null, response = null;
-
+    
     try{
-        response = await moviesDAL.updateMovie(id, movie);
+        response = await moviesDAL.updateMovie(movie);
         updateMovie = response.data;
     }
     catch(err){

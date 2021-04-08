@@ -42,7 +42,7 @@ function AddMovieComp() {
     const formik = useFormik({
         initialValues: {
             name: '',
-            generes: '',
+            genres: '',
             imageUrl: '',
             premiered: '',
             
@@ -52,7 +52,7 @@ function AddMovieComp() {
               .min(2, 'Too Short!')
               .max(50, 'Too Long!')
               .required('Required'),
-            generes: Yup.string()
+            genres: Yup.string()
               .min(3, 'Too Short!')
               .max(50, 'Too Long!')
               .required('Required'),
@@ -66,9 +66,10 @@ function AddMovieComp() {
               .required('Required'),
         }),
         onSubmit: async (values) => {
+            let genres = values.genres.split(',');
             let addedMovie = {
                 name : values.name,
-                generes : values.generes,
+                genres : genres,
                 image : {
                     medium : values.imageUrl,
                     original : ''
@@ -131,14 +132,14 @@ function AddMovieComp() {
 
                 <br/>
 
-                <label htmlFor="generes">Generes</label>
+                <label htmlFor="genres">Genres</label>
                 <input
-                    id="generes"
+                    id="genres"
                     type="text"
-                    {...formik.getFieldProps('generes')}
+                    {...formik.getFieldProps('genres')}
                 />
-                {formik.touched.generes && formik.errors.generes ? (
-                    <div>{formik.errors.generes}</div>
+                {formik.touched.genres && formik.errors.genres ? (
+                    <div>{formik.errors.genres}</div>
                 ) : null}
 
                 <br/>
@@ -160,6 +161,7 @@ function AddMovieComp() {
                     id="premiered"
                     label="Premiered"
                     type="date"
+                    format={'dd/mm/yyyy'}
                     onChange={formik.handleChange}
                     {...formik.getFieldProps('premiered')}
                     

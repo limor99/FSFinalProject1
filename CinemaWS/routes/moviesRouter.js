@@ -14,11 +14,10 @@ router.route('/:id').get(async function(req, res){
     res.send(data);
 })
 
-router.route('/:id').put(async function(req, res){
-    let id = req.params.id;
-    let updateMovie = req.body.movie;
+router.route('/').put(async function(req, res){
+    let updatedMovie = req.body;
 
-    let data = await moviesBL.updateMovie(id, updateMovie);
+    let data = await moviesBL.updateMovie(updatedMovie);
 
     res.send(data);
 })
@@ -29,6 +28,28 @@ router.route('/').post(async function(req, res){
     let data = await moviesBL.addMovie(addedMovie);
 
     res.send(data);
+})
+
+router.route('/:id').delete(async function(req, res){
+    let id = req.params.id;
+
+    let isDeleted = await moviesBL.deleteMovie(id);
+
+    if(isDeleted){
+        let response = {
+            success : true,
+            msg : `User ${id} deleted` 
+        }
+        res.status(200).json(response);
+    }
+    else{
+        let response = {
+            success : false,
+            msg : `An error ocuured while try to delete user: ${id}` 
+        }
+        res.json(response);
+
+    }
 })
 
 
