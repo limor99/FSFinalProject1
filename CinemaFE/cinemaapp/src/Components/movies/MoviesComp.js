@@ -27,8 +27,8 @@ function MoviesComp() {
 
         <div>
             {
-                movieResult.map((movie, index) =>{
-                    return <MovieComp key={index} movie={movie}/>
+                movieResult.map(movie =>{
+                    return <MovieComp key={movie._id} movie={movie}/>
                 })
             }
 

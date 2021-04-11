@@ -1,7 +1,7 @@
 import { act } from '@testing-library/react';
 import movieUtil from '../../src/Utils/movieUtil';
 
-function reducer(state = { users : [], movies : [], members : [], counter: 0, userFullName: '', msg: ''}, action){
+function reducer(state = { users : [], movies : [], members : [], subscriptions: [], counter: 0, userFullName: '', msg: ''}, action){
     let currentUsers = state.users;
     let newUsersArr = null;
     
@@ -12,50 +12,53 @@ function reducer(state = { users : [], movies : [], members : [], counter: 0, us
     let newMembersArr = null;
 
     switch (action.type){
-        case "LoadData":
+        case 'LoadData':
          //   let movies = action.payload;
            // let movies3 = movies.slice(0, 2);
-          // console.log(" mpvies in payload")
+          // console.log(' mpvies in payload')
 
            // console.table(movies);
 
          //       let currentMovies = state.movies;
            //     currentMovies = currentMovies.concat(movies)
-            //    console.log("all movies after we load")
+            //    console.log('all movies after we load')
              //   console.log(currentMovies)
 
                 return { ...state, movies: currentMovies};
-        case "LoadUsers":
+        case 'LoadUsers':
             let users = action.payload;
             newUsersArr = [...currentUsers, ...users];
 
             return {...state, users : newUsersArr};
 
-        case "LoadMovies":
+        case 'LoadMovies':
             let movies = action.payload;
             newMoviesArr = [...currentMovies, ...movies];
 
             return {...state, movies : newMoviesArr};
 
-        case "LoadMembers":
+        case 'LoadMembers':
             let members = action.payload;
             newMembersArr = [...currentMembers, ...members];
 
             return {...state, members : newMembersArr};
         
-        case "AddUser":
+        case 'LoadSubscriptions':
+
+        
+        case 'AddUser':
             let newUser = action.payload;
             newUsersArr = [...currentUsers, newUser];
 
             return {...state, users : newUsersArr};
             
-        case "DeleteUser":
+        case 'DeleteUser':
             let userId = action.payload;
             let updatedUsers = currentUsers.filter(u => u.id !== userId);
 
             return {...state, users : updatedUsers};
 
-        case "UpdateUser":
+        case 'UpdateUser':
             let updatedUser = action.payload;
             let userToUpdateIndx = currentUsers.findIndex(user => user.id === action.payload.id)
             if(userToUpdateIndx > -1){
@@ -64,13 +67,13 @@ function reducer(state = { users : [], movies : [], members : [], counter: 0, us
             
             return {...state, users : currentUsers};
 
-        case "AddMovie":
+        case 'AddMovie':
             let newMovie = action.payload;
             newMoviesArr = [...currentMovies, newMovie];
 
             return {...state, movies : newMoviesArr};
 
-        case "UpdateMovie":
+        case 'UpdateMovie':
             let updatedMovie = action.payload;
             let movieToUpdateIndx = currentMovies.findIndex(movie => movie._id === updatedMovie._id)
             if(movieToUpdateIndx > -1){
@@ -79,17 +82,24 @@ function reducer(state = { users : [], movies : [], members : [], counter: 0, us
             
             return {...state, movies : currentMovies};
 
-        case "DeleteMovie":
+        case 'DeleteMovie':
             let movieId = action.payload;
             let updatedMovies = currentMovies.filter(m => m._id !== movieId);
     
             return {...state, movies : updatedMovies};
+
+        case 'AddMember':
+            let newMember = action.payload;
+            newMembersArr = [...currentMembers, newMember];
+
+            return {...state, members : newMembersArr};
+
         
-        case "UpdateMsg":
+        case 'UpdateMsg':
             let newMsg = action.payload;
              return {...state, msg: newMsg}
 
-        case "updateUserFullName":
+        case 'updateUserFullName':
             let userFullName = action.payload;
 
             return { ...state, userFullName: userFullName};

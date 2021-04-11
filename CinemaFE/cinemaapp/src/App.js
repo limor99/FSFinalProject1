@@ -11,6 +11,8 @@ import Main from './Components/MainComp';
 import Welcome from './Components/WelcomeComp';
 import Movies from './Components/movies/MoviesComp';
 import Members from './Components/subscriptions/MembersComp';
+import EditMember from './Components/subscriptions/EditMemberComp';
+import AddMember from './Components/subscriptions/AddMemberComp';
 import Header from './Components/HeaderComp';
 import Users from './Components/users/UsersComp';
 import AddUser from './Components/users/AddUserComp';
@@ -24,20 +26,20 @@ import permissions from './Components/customField/PermossionComp';
 import permissions1 from './Components/customField/PermossionComp1';
 import usersUtil from './Utils/usersUtil';
 import movieUtil from '../src/Utils/movieUtil';
-import memberUtil from '../src/Utils/memberUtil';
+import memberUtil from './Utils/membersUtil';
 
 function App() {
 
   const users = useSelector(state => state.users);
   const movies = useSelector(state => state.movies);
-  const members = useSelector(state => state.nenbers);
+  const members = useSelector(state => state.members);
 
   const dispatch = useDispatch();
   const userFullName = useSelector(state => state.userFullName);
     
   useEffect(() => {
     // Using an IIFE
-    (async function anyNameFunction() {
+    (async function loadData() {
       if(users.length === 0){
         let respUser = await usersUtil.getUsers();
 
@@ -84,7 +86,9 @@ function App() {
         <Route path="/movies" component={Movies}/>
         <Route path="/addMovie" component={AddMovie}/>
         <Route path="/movie/:id" component={EditMovie}/>
-        <Route path="/Subscriptions" component={Members}/>
+        <Route path="/subscriptions" component={Members}/>
+        <Route path="/subscription/:id" component={EditMember}/>
+        <Route path="/addMember" component={AddMember}/>
         <Route path="/users" component={Users}/>
         <Route path="/addUser" component={AddUser}/>
         <Route path="/user/:id" component={EditUser}/>

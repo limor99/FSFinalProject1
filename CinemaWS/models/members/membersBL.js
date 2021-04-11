@@ -47,7 +47,7 @@ exports.addMember = async function(member){
     let addedMember = null,  response = null;
 
     try{
-        response = await membersDAL.addMovie(member);
+        response = await membersDAL.addMember(member);
         addedMember = response.data;
     }
     catch(err){

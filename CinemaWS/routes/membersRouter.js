@@ -25,7 +25,7 @@ router.route('/:id').put(async function(req, res){
 })
 
 router.route('/').post(async function(req, res){
-    let addedMemeber = req.body.member;
+    let addedMemeber = req.body;
 
     let data = await membersBL.addMember(addedMemeber);
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { userHistory, Link, useHistory } from 'react-router-dom';
@@ -13,7 +13,6 @@ import { red } from '@material-ui/core/colors';
 
 import './MovieComp.css';
 import moviesUtil from '../../Utils/movieUtil';
-import movieUtil from '../../Utils/movieUtil';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -33,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 function AddMovieComp() {
-    const [msg, setMsg] = useState('')
+    const [msg, setMsg] = useState('');
     const classes = useStyles();
 
     const dispatch = useDispatch();
