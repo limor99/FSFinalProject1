@@ -44,6 +44,7 @@ router.route('/').post(async function (req, resp){
 
     if(createdMember != null){
         success = true;
+        let memberId = createdMember._id,
         msg = 'The member was saved successfully';
     }else{
         msg = 'An error occurred while saving the member';
