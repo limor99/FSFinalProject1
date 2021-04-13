@@ -11,6 +11,7 @@ import Main from './Components/MainComp';
 import Welcome from './Components/WelcomeComp';
 import Movies from './Components/movies/MoviesComp';
 import Members from './Components/subscriptions/MembersComp';
+import MembersSubscriptions from './Components/subscriptions/MembersSubscriptionsComp';
 import EditMember from './Components/subscriptions/EditMemberComp';
 import AddMember from './Components/subscriptions/AddMemberComp';
 import Header from './Components/HeaderComp';
@@ -27,12 +28,15 @@ import permissions1 from './Components/customField/PermossionComp1';
 import usersUtil from './Utils/usersUtil';
 import movieUtil from '../src/Utils/movieUtil';
 import memberUtil from './Utils/membersUtil';
+import subscriptionsUtil from './Utils/subscriptionsUtil';
 
 function App() {
 
   const users = useSelector(state => state.users);
   const movies = useSelector(state => state.movies);
   const members = useSelector(state => state.members);
+ const membersSubscriptions = useSelector(state => state.membersSubscriptions)
+  const subscriptions = useSelector(state => state.subscriptions)
 
   const dispatch = useDispatch();
   const userFullName = useSelector(state => state.userFullName);
@@ -71,6 +75,27 @@ function App() {
             payload : members
           })
         }
+
+        //LoadMembersSubscriptions
+        if(membersSubscriptions.length === 0){
+          let membersSubscriptions = await subscriptionsUtil.getFullMembersSubscriptions();
+
+          dispatch({
+            type : "LoadMembersSubscriptions",
+            payload : membersSubscriptions
+          })
+        }
+        
+
+        if(subscriptions.length === 0){
+          let resp = await subscriptionsUtil.getSubscriptions();
+          let subscriptions = resp.subscriptions;
+          
+          dispatch({
+            type : "LoadSubscriptions",
+            payload : subscriptions
+          })
+        }
       })();
     }, []);
 
@@ -86,7 +111,7 @@ function App() {
         <Route path="/movies" component={Movies}/>
         <Route path="/addMovie" component={AddMovie}/>
         <Route path="/movie/:id" component={EditMovie}/>
-        <Route path="/subscriptions" component={Members}/>
+        <Route path="/subscriptions" component={MembersSubscriptions}/>
         <Route path="/subscription/:id" component={EditMember}/>
         <Route path="/addMember" component={AddMember}/>
         <Route path="/users" component={Users}/>

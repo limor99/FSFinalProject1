@@ -13,6 +13,7 @@ app.use(cors());
 app.use('/api/movies', require('./routes/moviesRouter'));
 app.use('/api/members', require('./routes/membersRouter'));
 app.use('/api/users', require('./routes/usersRouter'));
+app.use('/api/subscriptions', require('./routes/subscriptionsRouter'));
 
 
 app.listen(5000, function() {

@@ -92,14 +92,16 @@ router.route('/').post(async function(req, resp) {
   
   if(createdMovie != null){
     success = true;
+    movieId = createdMovie._id;
     msg = 'The movie was saved successfully';
   }else{
     msg = 'An error occurred while saving the movie';
   }
 
   let result = {
-    "success": success,
-    "msg": msg
+    'success': success,
+    'movieId': movieId,
+    'msg': msg
   }
 
   console.log(result)

@@ -40,19 +40,20 @@ router.route('/').post(async function (req, resp){
     let createdMember = await membersBL.addMember(newMember);
     
     let success = false, msg;
-    
+    let memberId;
 
     if(createdMember != null){
         success = true;
-        let memberId = createdMember._id,
+        memberId = createdMember._id;
         msg = 'The member was saved successfully';
     }else{
         msg = 'An error occurred while saving the member';
     }
 
     let result = {
-        "success": success,
-        "msg": msg
+        'success': success,
+        'memberId': memberId,
+        'msg': msg
     }
 
     resp.json(result);

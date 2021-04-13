@@ -1,7 +1,8 @@
 import React from 'react';
 import {Link } from 'react-router-dom';
 
-import Subscribers from './SubscriptionsComp';
+import MemberSubscriptions from './MemberSubscriptionsComp';
+
 
 import './MemberComp.css'
 
@@ -23,7 +24,7 @@ function MemberComp(props) {
            <button><Link to={`/subscription/${props.member._id}`}>Edit</Link></button>
            <input type="button" value="Delete" onClick={() => deleteMember(props.member._id)}/>
 
-           <Subscribers/>          
+            <MemberSubscriptions id={props.member._id} />
             
         </div>
     )

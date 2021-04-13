@@ -76,7 +76,7 @@ function AddMovieComp() {
                 premiered : values.premiered
             }
 
-            let resp = await moviesUtil.addMovie(values)
+            let resp = await moviesUtil.addMovie(addedMovie)
             //console.log(resp.data)
 
             if(resp.success){

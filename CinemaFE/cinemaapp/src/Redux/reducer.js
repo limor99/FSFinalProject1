@@ -1,7 +1,7 @@
 import { act } from '@testing-library/react';
 import movieUtil from '../../src/Utils/movieUtil';
 
-function reducer(state = { users : [], movies : [], members : [], subscriptions: [], counter: 0, userFullName: '', msg: ''}, action){
+function reducer(state = { users : [], movies : [], members : [], subscriptions : [], membersSubscriptions: [], counter: 0, userFullName: '', msg: ''}, action){
     let currentUsers = state.users;
     let newUsersArr = null;
     
@@ -10,6 +10,12 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions:
     
     let currentMembers = state.members;
     let newMembersArr = null;
+
+    let currentMembersSubscriptions = state.membersSubscriptions;
+    let newMembersSubscriptionsArr = null;
+
+    let currentSubscriptions = state.subscriptions;
+    let newSubscriptionsArr = null;
 
     switch (action.type){
         case 'LoadData':
@@ -43,9 +49,19 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions:
 
             return {...state, members : newMembersArr};
         
-        case 'LoadSubscriptions':
+        case 'LoadMembersSubscriptions':
+            let membersSubscriptions = action.payload;
+            newMembersSubscriptionsArr = [...currentMembersSubscriptions, ...membersSubscriptions];
+
+            return {...state, membersSubscriptions : newMembersSubscriptionsArr};
 
         
+        case 'LoadSubscriptions':
+            let subscriptions = action.payload;
+            newSubscriptionsArr = [...currentSubscriptions, ...subscriptions];
+
+            return {...state, subscriptions : newSubscriptionsArr};
+            
         case 'AddUser':
             let newUser = action.payload;
             newUsersArr = [...currentUsers, newUser];
@@ -89,10 +105,24 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions:
             return {...state, movies : updatedMovies};
 
         case 'AddMember':
+            /*
             let newMember = action.payload;
             newMembersArr = [...currentMembers, newMember];
 
             return {...state, members : newMembersArr};
+            */
+
+            let newMember = action.payload;
+            let newMemberSubscription = {
+                'id' : newMember._id,
+                'name' : newMember.name,
+                'email' : newMember.email,
+                'city' : newMember.city,
+                'movies' : [],
+                'unwatched' : []
+            }
+            newMembersSubscriptionsArr = [...currentMembersSubscriptions, newMemberSubscription];
+            return {...state, membersSubscriptions : newMembersSubscriptionsArr};
 
         
         case 'UpdateMsg':

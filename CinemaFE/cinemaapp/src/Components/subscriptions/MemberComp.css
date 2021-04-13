@@ -1,3 +1,12 @@
 .member{
     border: 1px solid red
 }
+
+.moviesWatched{
+    border: 1px solid red;
+    margin: 1rem;
+}
+
+.stam{
+    display: block;
+}
