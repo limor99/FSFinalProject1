@@ -30,7 +30,7 @@ const updateMember = async (updatedMember) =>{
     let resp = {};
     
     try{
-        resp = await axios.put(membersUrl, updatedMember);
+        resp = await axios.put(`${membersUrl}/${updatedMember.id}`, updatedMember);
     }
     catch(err){
         console.log(`An Error occured while try to update member: ${err}`);

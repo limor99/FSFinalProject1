@@ -7,13 +7,15 @@ import MemberMenu from './menu/MemberMenu';
 import './MembersSubscriptionsComp.css';
 import subscriptionsUtil from '../../Utils/subscriptionsUtil';
 
-function SubscriptionsComp() {
+function MembersSubscriptionsComp() {
     const membersSubscriptions = useSelector(state => state.membersSubscriptions);
+    const msg = useSelector(state => state.msg)
     const dispatch = useDispatch();
 
     return (
         <div className=''>
             <MemberMenu/>
+            {msg}
             <div className='subscribers'>
                 All Members Subscriptions
 
@@ -30,4 +32,4 @@ function SubscriptionsComp() {
     )
 }
 
-export default SubscriptionsComp
+export default MembersSubscriptionsComp

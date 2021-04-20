@@ -1,21 +1,37 @@
 import React, {useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 
-import './MemberComp.css'
+import './MemberComp.css';
+import membersUtil from '../../Utils/membersUtil';
 
 import moment from 'moment';
  
 
-function SubscriptionComp(props) {
+function MemberSubscriptionComp(props) {
     const [watchedMovies, setWatchedMovies] = useState(props.memberSubscriptions.movies);
-    console.log('watchedMovies', {watchedMovies});
-    const deleteMember = (memberId) =>{
 
+    const dispatch = useDispatch();
+    const history = useHistory();
 
+    const deleteMember = async (memberId) =>{
+        let response = await membersUtil.deleteMember(memberId);
+        if(response.success){
+            dispatch({
+                type: "DeleteMember",
+                payload: memberId
+            })
+        }
+        
+        dispatch({
+        
+            type: "UpdateMsg",
+            payload: response.msg
+        })
+
+        history.push('/subscriptions');
     }
 
-    
     const subscribeToMovie = () =>{
 
     }
@@ -26,9 +42,9 @@ function SubscriptionComp(props) {
 <h4>{props.memberSubscriptions.name}</h4>
            Email: {props.memberSubscriptions.email} <br/>
            City: {props.memberSubscriptions.city} <br/>
-
+            {console.log(props.memberSubscriptions.name)}
            <button><Link to={`/subscription/${props.memberSubscriptions.id}`}>Edit</Link></button>
-           <input type="button" value="Delete" onClick={() => deleteMember(props.member._id)}/>
+           <input type="button" value="Delete" onClick={() => deleteMember(props.memberSubscriptions.id)}/>
             <h5>Movies Watched</h5>
             
             {
@@ -50,4 +66,4 @@ function SubscriptionComp(props) {
     )
 }
 
-export default SubscriptionComp
+export default MemberSubscriptionComp

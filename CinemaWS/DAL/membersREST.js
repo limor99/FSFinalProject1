@@ -10,10 +10,15 @@ exports.getMemberById = function(id){
     return axios.get(`${membersWSUrl}${id}`);
 }
 
+exports.addMember = function(member){
+    return axios.post(`${membersWSUrl}`, member);
+}
+
 exports.updateMember = function(memberId ,member){
     return axios.put(`${membersWSUrl}${memberId}`, member);
 }
 
-exports.addMember = function(member){
-    return axios.post(`${membersWSUrl}`, member);
+exports.deleteMember = function(memberId){
+    return axios.delete(`${membersWSUrl}${memberId}`);
 }
+

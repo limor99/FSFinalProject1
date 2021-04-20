@@ -84,17 +84,9 @@ router.route('/:id').get(async function(req, resp){
     
 router.route('/:id').put(async function(req, resp) {
     let id = req.params.id;
-    let name = req.body.name;
-    let email = req.body.email;
-    let city = req.body.city;
+    let updatedMember = req.body;
       
-    let member = {
-      "name" : name,
-      "email" : email, 
-      "city" : city
-    }
-  
-    let updateMember = await membersBL.updateMember(id, member);
+    let updateMember = await membersBL.updateMember(id, updatedMember);
       
     let success = false, msg;
     
@@ -108,7 +100,7 @@ router.route('/:id').put(async function(req, resp) {
     let result = {
       "success": success,
       "msg": msg,
-      "member": member
+      "member": updateMember
     }
   
     resp.json(result);

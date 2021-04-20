@@ -57,5 +57,22 @@ exports.addMember = async function(member){
     return addedMember;
 }
 
-/* TODO  -  write delete member  including from theall his sourece */
+exports.deleteMember = async function(id){
+    let response = null, data = null;;
+
+    try{
+        response = await membersDAL.deleteMember(id);
+        data = response.data;
+    }
+    catch(err){
+        console.log(`An error occured while try to delete member: ${id} : ${err}`);
+        data = {
+            'success': false,
+            'msg' : `An error occured while try to delete Member: ${id}`
+        }
+    }
+
+    return data;
+
+}
 

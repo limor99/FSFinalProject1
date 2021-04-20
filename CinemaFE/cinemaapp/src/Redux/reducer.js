@@ -75,12 +75,13 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions 
             return {...state, users : updatedUsers};
 
         case 'UpdateUser':
-            let updatedUser = action.payload;
-            let userToUpdateIndx = currentUsers.findIndex(user => user.id === action.payload.id)
+            let userToUpdateIndx = state.users.findIndex(user => user.id === action.payload.id)
             if(userToUpdateIndx > -1){
-                currentUsers[userToUpdateIndx] = updatedUser
+                currentUsers = state.users;
+                let updatedUser = action.payload;
+                currentUsers[userToUpdateIndx] = updatedUser;
             }
-            
+
             return {...state, users : currentUsers};
 
         case 'AddMovie':
@@ -105,13 +106,6 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions 
             return {...state, movies : updatedMovies};
 
         case 'AddMember':
-            /*
-            let newMember = action.payload;
-            newMembersArr = [...currentMembers, newMember];
-
-            return {...state, members : newMembersArr};
-            */
-
             let newMember = action.payload;
             let newMemberSubscription = {
                 'id' : newMember._id,
@@ -124,6 +118,25 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions 
             newMembersSubscriptionsArr = [...currentMembersSubscriptions, newMemberSubscription];
             return {...state, membersSubscriptions : newMembersSubscriptionsArr};
 
+        case 'UpdateMember':
+            let updatedMember = action.payload;
+            let memberToUpdateIndx = currentMembersSubscriptions.findIndex(cms => cms.id === updatedMember.id)
+            if(memberToUpdateIndx > -1){
+                currentMembersSubscriptions[memberToUpdateIndx].name = updatedMember.name;
+                currentMembersSubscriptions[memberToUpdateIndx].email = updatedMember.email;
+                currentMembersSubscriptions[memberToUpdateIndx].city = updatedMember.city;
+            }
+            
+            return {...state, membersSubscriptions : currentMembersSubscriptions};
+
+            case 'DeleteMember':
+                let memberId = action.payload;
+                let memberToDeleteIndx = currentMembersSubscriptions.findIndex(cms => cms.id === memberId)
+                if(memberToDeleteIndx > -1){
+                    currentMembersSubscriptions.splice(memberToDeleteIndx, 1);
+                }
+                
+                return {...state, membersSubscriptions : currentMembersSubscriptions};
         
         case 'UpdateMsg':
             let newMsg = action.payload;

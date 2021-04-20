@@ -8,17 +8,42 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducer from '../src/Redux/reducer';
 
-import { persistStore, persistReducer } from 'redux-persist';
+import { createMigrate, persistStore, persistReducer } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import storage from 'redux-persist/lib/storage';
+import autoMergeLevel1 from 'redux-persist/es/stateReconciler/autoMergeLevel1';
 
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+import hardSet from 'redux-persist/es/stateReconciler/hardSet';
 
 import { BrowserRouter} from 'react-router-dom';
+
+
+
+const migration = {
+  0: (state) =>{
+    return {
+      ...state, 
+      device: undefined
+    }
+  },
+  1: (state) =>{
+    return {
+      device: state.device
+    }
+  }
+}
 
 const persistConfig = {
   key: 'root',
   storage, // which reducer want to store
-  
+  version: 1,
+  stateReconciler: autoMergeLevel1, 
+  migrate: createMigrate(migration, {debug: false}),
+  /*(state) =>{
+    console.log('************************************************************');
+    return Promise.resolve(state);
+  }*/
 };
 const pReducer = persistReducer(persistConfig, reducer);
 
