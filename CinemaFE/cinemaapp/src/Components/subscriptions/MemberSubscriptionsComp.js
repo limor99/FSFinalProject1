@@ -2,6 +2,8 @@ import React, {useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 
+import SubscribeToMovie from './SubscribeToMovieComp';
+
 import './MemberComp.css';
 import membersUtil from '../../Utils/membersUtil';
 
@@ -9,7 +11,9 @@ import moment from 'moment';
  
 
 function MemberSubscriptionComp(props) {
-    const [watchedMovies, setWatchedMovies] = useState(props.memberSubscriptions.movies);
+    
+  //  const [watchedMovies, setWatchedMovies] = useState(props.memberSubscriptions.movies);
+    const [isShowUnsubscribeMovies, setIsShowUnsubscribeMovis] = useState(false);
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -33,6 +37,8 @@ function MemberSubscriptionComp(props) {
     }
 
     const subscribeToMovie = () =>{
+        setIsShowUnsubscribeMovis(!isShowUnsubscribeMovies);
+        //console.log(isShowUnsubscribeMovies);
 
     }
 
@@ -42,18 +48,21 @@ function MemberSubscriptionComp(props) {
 <h4>{props.memberSubscriptions.name}</h4>
            Email: {props.memberSubscriptions.email} <br/>
            City: {props.memberSubscriptions.city} <br/>
-            {console.log(props.memberSubscriptions.name)}
            <button><Link to={`/subscription/${props.memberSubscriptions.id}`}>Edit</Link></button>
            <input type="button" value="Delete" onClick={() => deleteMember(props.memberSubscriptions.id)}/>
             <h5>Movies Watched</h5>
+            <button onClick={() => subscribeToMovie()} >subscribe To New Movie</button>
+            
+            {isShowUnsubscribeMovies ? <SubscribeToMovie memberId={props.memberSubscriptions.id} unwatched={props.memberSubscriptions.unwatched}/> : null}
+                
             
             {
                 
-                watchedMovies.length === 0 ? <div>this member didn't watch any movie yet</div> : 
+                props.memberSubscriptions.movies.length === 0 ? <div>this member didn't watch any movie yet</div> : 
                 <ul>
                     {
-                        watchedMovies.map(wm =>{
-                            return <li key={wm.movieId} className='stam'><Link to={`/movie/${wm.movieId}`}>{wm.movieName}</Link>, {moment(wm.watchDate).format('DD/MM/YYYY')}</li>
+                        props.memberSubscriptions.movies.map(wm =>{
+                            return <li key={wm._id} className='stam'><Link to={`/movie/${wm._id}`}>{wm.name}</Link>, {moment(wm.watchedDate).format('DD/MM/YYYY')}</li>
 
                         })
                     }

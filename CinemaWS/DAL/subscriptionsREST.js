@@ -5,3 +5,8 @@ exports.getSubscriptions = function(){
     return axios.get(subscriptionsWSUrl);
 
 }
+
+exports.subscribeToMovie = function(subscribeMovie){
+    return axios.post(subscriptionsWSUrl, subscribeMovie);
+
+}

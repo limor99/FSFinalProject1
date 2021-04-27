@@ -4,8 +4,6 @@ import moviesUtils from './movieUtil';
 
 const subscriptionsUrl = "http://localhost:5000/api/subscriptions/";
 
-
-
 const getSubscriptions = async () =>{
     let resp = await axios.get(`${subscriptionsUrl}`);
     return resp.data;
@@ -93,6 +91,10 @@ const getFullMembersSubscriptions = async () => {
 
 }
 
+const subscribeToMovie = async (subscribedMovie) =>{
+    let resp = await axios.post(subscriptionsUrl, subscribedMovie);
+    return resp.data;
 
+}
 
-export default {getSubscriptions, getFullMembersSubscriptions};
+export default {getSubscriptions, getFullMembersSubscriptions, subscribeToMovie};

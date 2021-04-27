@@ -3,13 +3,12 @@ import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { userHistory, Link, useHistory } from 'react-router-dom';
-import moment from 'moment';
 
 import MovieMenu from './menu/MovieMenu';
 
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { red } from '@material-ui/core/colors';
+
 
 import './MovieComp.css';
 import moviesUtil from '../../Utils/movieUtil';
@@ -25,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
       width: 200,
       
     },
-    input: {
+    date: {
         color: "red",
         backgroundColor: 'white'
     }
@@ -165,7 +164,7 @@ function AddMovieComp() {
                     {...formik.getFieldProps('premiered')}
                     
                     
-                    className={classes.input}
+                    className={classes.date}
                     
                     InputLabelProps={{
                     shrink: true,

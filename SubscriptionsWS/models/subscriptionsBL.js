@@ -45,7 +45,7 @@ exports.subscribeToMovie = async function(subscribeMovie){
         ]
     }
 
-    try{Subscription.fin
+    try{
         let subscriber = await Subscription.findOne({memberId : subscribeMovie.memberId});
         if(subscriber != null){  //member's has subscribe movies so we need update the movies array
             answer = await Subscription.updateOne({memberId : movieSubscription.memberId }, {$push: {movies: {movieId: movieSubscription.movies[0].movieId, date: movieSubscription.movies[0].date }}})
@@ -55,7 +55,7 @@ exports.subscribeToMovie = async function(subscribeMovie){
         }
         else{   //member's has not subscribe movies so we need to add new member and it's movie subscriptions
             let subscription = new Subscription(movieSubscription);
-            updatedSubscription = subscription.save();
+            updatedSubscription = await subscription.save();
 
         }
     }

@@ -10,7 +10,6 @@ import Login from '../src/Components/LoginComp';
 import Main from './Components/MainComp';
 import Welcome from './Components/WelcomeComp';
 import Movies from './Components/movies/MoviesComp';
-import Members from './Components/subscriptions/MembersComp';
 import MembersSubscriptions from './Components/subscriptions/MembersSubscriptionsComp';
 import EditMember from './Components/subscriptions/EditMemberComp';
 import AddMember from './Components/subscriptions/AddMemberComp';

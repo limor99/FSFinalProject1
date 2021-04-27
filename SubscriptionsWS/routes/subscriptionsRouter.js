@@ -48,34 +48,28 @@ router.route('/:id').delete(async function(req, resp){2
 })
 
 router.route("/").post(async function(req, resp){
-    let memberId = req.body.memberId;
-    let subscribeMovieId = req.body.subscribeMovieId;
-    let watchedDate = req.body.watchedDate;
-
-    let subscribeMovie = {
-        memberId,
-        subscribeMovieId,
-        watchedDate
-    }
-
+    let subscribeMovie = req.body;
+        
     let subscription = await subscriptionsBL.subscribeToMovie(subscribeMovie);
 
-    let success = false, msg = '';
+    let success = false, msg;
 
     if(subscription != null){
         success = true;
+        msg = 'subscriptions success'
     }
     else{
         msg = `An error occured while try to add/update subscribe to movie: ${subscribeMovie.subscribeMovieId} for member ${subscribeMovie.memberId} in db`;
     }
 
     let result = {
-        "success": success,
-        "msg": msg
+        'success': success,
+        'msg': msg,
     }
 
     resp.json(result);
 
 })
+
 
 module.exports = router;

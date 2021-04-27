@@ -8,4 +8,19 @@ router.route('/').get(async function(req, res){
     res.send(data);
 })
 
+router.route('/').post(async function(req, res){
+    let memberId = req.body.memberId;
+    let subscribeMovieId = req.body.selectedMovieId;
+    let watchedDate = req.body.watchedDate;
+
+    let subscribeMovie = {
+        memberId,
+        subscribeMovieId,
+        watchedDate
+    }
+
+    let data  = await subscriptionsBL.subscribeToMovie(subscribeMovie);
+    res.send(data);
+})
+
 module.exports = router;
