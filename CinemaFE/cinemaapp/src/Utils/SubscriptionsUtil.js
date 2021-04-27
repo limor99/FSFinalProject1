@@ -48,12 +48,12 @@ const getFullMembersSubscriptions = async () => {
                         movie = movies.filter(m => mi.movieId === m._id);
                         if(movie.length > 0){
                             return {
-                                "movieId" : movie[0]._id,
-                                "movieName" : movie[0].name,
-                                'movieGenres': movie[0].genres,
-                                'movieImgUrl': movie[0].image.medium,
-                                'moviePremiered': movie[0].image.premiered,
-                                "watchDate" : mi.date
+                                "id" : movie[0]._id,
+                                "name" : movie[0].name,
+                                'genres': movie[0].genres,
+                                'imgUrl': movie[0].image.medium,
+                                'premiered': movie[0].image.premiered,
+                                "watchedDate" : mi.date
                             }
 
                         }
@@ -63,7 +63,7 @@ const getFullMembersSubscriptions = async () => {
                     movies.forEach(m => {
                         if(!subscribeMoviesIds.includes(m._id)){
                             let unsubscribedMovie = {
-                                "_id" : m._id,
+                                "id" : m._id,
                                 "name" : m.name
                             }
                             

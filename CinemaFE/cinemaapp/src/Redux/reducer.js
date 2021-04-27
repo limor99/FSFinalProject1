@@ -114,7 +114,7 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions 
                 'email' : newMember.email,
                 'city' : newMember.city,
                 'movies' : [],
-                'unwatched' : []
+                'unwatched' : state.movies
             }
             newMembersSubscriptionsArr = [...currentMembersSubscriptions, newMemberSubscription];
             return {...state, membersSubscriptions : newMembersSubscriptionsArr};
@@ -124,19 +124,22 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions 
             let memberToUpdateIndx = currentMembersSubscriptions.findIndex(cms => cms.id === action.payload.id);
             if(memberToUpdateIndx > -1){
                 let updatedMember = action.payload;
-                currentMembersSubscriptionsCopy[memberToUpdateIndx] = updatedMember;
+                let currenMember = currentMembersSubscriptionsCopy[memberToUpdateIndx];
+                let memberToUpdate = {...currenMember, name: updatedMember.name, email: updatedMember.email, city: updatedMember.city};
+                currentMembersSubscriptionsCopy[memberToUpdateIndx] = memberToUpdate;
             }
 
             return {...state, membersSubscriptions : currentMembersSubscriptionsCopy};
 
         case 'DeleteMember':
                 let memberId = action.payload;
-                let memberToDeleteIndx = currentMembersSubscriptions.findIndex(cms => cms.id === memberId)
+                let currentMembersSubscriptionsCopy3 = [...state.membersSubscriptions];
+                let memberToDeleteIndx = currentMembersSubscriptionsCopy3.findIndex(cms => cms.id === memberId)
                 if(memberToDeleteIndx > -1){
-                    currentMembersSubscriptions.splice(memberToDeleteIndx, 1);
+                    currentMembersSubscriptionsCopy3.splice(memberToDeleteIndx, 1);
                 }
                 
-                return {...state, membersSubscriptions : currentMembersSubscriptions};
+                return {...state, membersSubscriptions : currentMembersSubscriptionsCopy3};
 
         case 'SubscribeToMovie':
             let currentMembersSubscriptionsCopy2 = [...state.membersSubscriptions];
