@@ -55,7 +55,7 @@ function EditMovieComp(props) {
               .min(2, 'Too Short!')
               .max(50, 'Too Long!')
               .required('Required'),
-              genres: Yup.string()
+            genres: Yup.string()
               .min(3, 'Too Short!')
               .max(50, 'Too Long!')
               .required('Required'),
@@ -116,6 +116,9 @@ function EditMovieComp(props) {
                 }
                 else if(field === 'premiered'){
                     formik.setFieldValue(field, movie[field].slice(0, 10));
+                }
+                else if(field === 'genres'){
+                    formik.setFieldValue(field, movie[field].toString());
                 }
                 else{
                     formik.setFieldValue(field, movie[field]);
