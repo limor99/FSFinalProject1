@@ -62,7 +62,7 @@ function MemberSubscriptionComp(props) {
                 <ul>
                     {
                         props.memberSubscriptions.movies.map(wm =>{
-                            return <li key={wm.id} className='watchedMovie'><Link to={`/movie/${wm.id}`}>{wm.name}</Link>, {moment(wm.watchedDate).format('DD/MM/YYYY')}</li>
+                            return <li key={wm.id} className='watchedMovie'><Link to={`/movies/${wm.id}`}>{wm.name}</Link>, {moment(wm.watchedDate).format('DD/MM/YYYY')}</li>
 
                         })
                     }

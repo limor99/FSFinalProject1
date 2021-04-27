@@ -107,7 +107,8 @@ function App() {
         <Route path="/login" component={Login}/>
         <Route path="/createAccount" component={createAccount}/>
         <Route path="/main" component={Main}/>
-        <Route path="/movies" component={Movies}/>
+        <Route path="/movies/:id" component={Movies}/>
+        <Route path="/movies/" component={Movies}/>
         <Route path="/addMovie" component={AddMovie}/>
         <Route path="/movie/:id" component={EditMovie}/>
         <Route path="/subscriptions" component={MembersSubscriptions}/>
