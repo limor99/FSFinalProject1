@@ -27,14 +27,26 @@ function MovieComp(props) {
 
     return (
         <div className="movie">
-            name: {props.movie.name} <br/>
-            year: {props.movie.premiered.slice(0, 4)} <br/>
-            genres: {props.movie.genres.join()} <br/>
-            image: <img className="imgSize" src={props.movie.image.medium}/> <br/>
-            subscriptions: <br/>
+            name: {props.movieSubscribers.name} <br/>
+            year: {props.movieSubscribers.premiered.slice(0, 4)} <br/>
+            genres: {props.movieSubscribers.genres.join()} <br/>
+            image: <img className="imgSize" src={props.movieSubscribers.image}/> <br/>
+            {
+                props.movieSubscribers.subscriberToMovie.length === 0 ? 
+                    <div>There are no subscribers for this movie</div>
+                    :
+                    <ul>
+                    {
+                        props.movieSubscribers.subscriberToMovie.map(stm => {
+                            console.log({stm})
+                            return <li key={stm.memberId}>{stm.memberName}</li>
+                        })
+                    }
+                    </ul>
+            }
 
-            <button><Link to={`/movie/${props.movie._id}`}>Edit</Link></button>
-            <input type="button" value="Delete" onClick={() => deleteMovie(props.movie._id)}/>
+            <button><Link to={`/movie/${props.movieSubscribers.id}`}>Edit</Link></button>
+            <input type="button" value="Delete" onClick={() => deleteMovie(props.movieSubscribers.id)}/>
 
 
         </div>

@@ -34,8 +34,9 @@ function App() {
   const users = useSelector(state => state.users);
   const movies = useSelector(state => state.movies);
   const members = useSelector(state => state.members);
- const membersSubscriptions = useSelector(state => state.membersSubscriptions)
-  const subscriptions = useSelector(state => state.subscriptions)
+ const membersSubscriptions = useSelector(state => state.membersSubscriptions);
+  const subscriptions = useSelector(state => state.subscriptions);
+  const moviesSubscribers = useSelector(state => state.moviesSubscribers)
 
   const dispatch = useDispatch();
   const userFullName = useSelector(state => state.userFullName);
@@ -82,6 +83,16 @@ function App() {
           dispatch({
             type : "LoadMembersSubscriptions",
             payload : membersSubscriptions
+          })
+        }
+
+        //LoadmoviesSubscribers
+        if(moviesSubscribers.length === 0){
+          let moviesSubscribers = await subscriptionsUtil.getFullMoviesSubscriptions();
+
+          dispatch({
+            type : "LoadmoviesSubscribers",
+            payload : moviesSubscribers
           })
         }
         

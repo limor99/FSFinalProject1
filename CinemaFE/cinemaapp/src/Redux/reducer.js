@@ -1,7 +1,7 @@
 import { act } from '@testing-library/react';
 import movieUtil from '../../src/Utils/movieUtil';
 
-function reducer(state = { users : [], movies : [], members : [], subscriptions : [], membersSubscriptions: [], counter: 0, userFullName: '', msg: ''}, action){
+function reducer(state = { users : [], movies : [], members : [], subscriptions : [], membersSubscriptions: [], moviesSubscribers: [], counter: 0, userFullName: '', msg: ''}, action){
     let currentUsers = state.users;
     let newUsersArr = null;
     
@@ -13,6 +13,9 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions 
 
     let currentMembersSubscriptions = state.membersSubscriptions;
     let newMembersSubscriptionsArr = null;
+
+    let currentmoviesSubscribers = state.moviesSubscribers;
+    let newmoviesSubscribersArr = null;
 
     let currentSubscriptions = state.subscriptions;
     let newSubscriptionsArr = null;
@@ -55,8 +58,13 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions 
 
             return {...state, membersSubscriptions : newMembersSubscriptionsArr};
 
+        case 'LoadmoviesSubscribers':
+            let moviesSubscribers = action.payload;
+            newmoviesSubscribersArr = [...currentmoviesSubscribers, ...moviesSubscribers];
+
+            return {...state, moviesSubscribers : newmoviesSubscribersArr};
         
-        case 'LoadSubscriptions':
+            case 'LoadSubscriptions':
             let subscriptions = action.payload;
             newSubscriptionsArr = [...currentSubscriptions, ...subscriptions];
 
@@ -143,7 +151,10 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions 
 
         case 'SubscribeToMovie':
             let currentMembersSubscriptionsCopy2 = [...state.membersSubscriptions];
+            let currentMoviesSubscribersCopy = [...state.moviesSubscribers];
+
             let memberSubscribedMovie = action.payload;
+
             let subscribedMemberIndx = currentMembersSubscriptionsCopy2.findIndex(cmsc => cmsc.id === memberSubscribedMovie.memberId);
             if(subscribedMemberIndx > -1){
                 let subscribedMember = currentMembersSubscriptionsCopy2[subscribedMemberIndx];
@@ -158,9 +169,32 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions 
                     subscribedMember.unwatched = unwatchedMovies;
                     currentMembersSubscriptionsCopy2[subscribedMemberIndx] = subscribedMember;
                 }
-            }           
 
-            return {...state, membersSubscriptions : currentMembersSubscriptionsCopy2};
+                let movieSubscribersIndx = currentMoviesSubscribersCopy.findIndex(cms => cms.id === memberSubscribedMovie.selectedMovieId);
+                if(movieSubscribersIndx > -1){
+                    let allMovieSubscribersData = currentMoviesSubscribersCopy[movieSubscribersIndx];
+                    let movieSubscribers = [...allMovieSubscribersData.subscriberToMovie];
+
+                    let memberId = subscribedMember.id;
+                    let memberName = subscribedMember.name;
+                    let wathcedDate = memberSubscribedMovie.watchedDate;
+    
+                    let newMovieSubscribe = {
+                        memberId,
+                        memberName,memberName,
+                        dateWatched : wathcedDate
+    
+                    }
+
+                    movieSubscribers.push(newMovieSubscribe);
+
+                    allMovieSubscribersData.subscriberToMovie = movieSubscribers;
+                    currentMoviesSubscribersCopy[movieSubscribersIndx] = allMovieSubscribersData;
+
+                }
+            } 
+
+            return {...state, membersSubscriptions : currentMembersSubscriptionsCopy2, moviesSubscribers : currentMoviesSubscribersCopy};
         
         case 'UpdateMsg':
             let newMsg = action.payload;

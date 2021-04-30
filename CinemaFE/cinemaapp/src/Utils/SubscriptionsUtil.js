@@ -91,10 +91,69 @@ const getFullMembersSubscriptions = async () => {
 
 }
 
+const getFullMoviesSubscriptions = async () => {
+    let moviesSubscribers = null; //the movies's subscriptions (each movie and it's subscribers)
+    let membersResp = await membersUtils.loadMembers();
+    let moviesResp = await moviesUtils.loadMovies();
+    let subscriptionsResp = await getSubscriptions();
+    let members, movies, subscriptions;
+
+    if(moviesResp){
+        movies = moviesResp.movies;
+    }
+    
+    if(membersResp){
+        members = membersResp.members;
+    }
+
+    if(subscriptionsResp){
+        subscriptions = subscriptionsResp.subscriptions;
+    }
+
+    if(subscriptions && movies && members)
+    {
+        moviesSubscribers = movies.map(movie => {
+            let subscriberToMovie = [];
+            subscriptions.forEach(s =>{
+                let subscribedMovies = s.movies;
+                let subscribedMovie = subscribedMovies.filter(sm => sm.movieId === movie._id);
+                if(subscribedMovie.length > 0){
+                    let memberName;
+                    let memberId = s.memberId;
+                    let member = members.filter(mem => mem._id === memberId);
+                    if(member.length > 0){
+                        memberName = member[0].name;
+
+                        let subscribe = {
+                            memberId : memberId,
+                            memberName : memberName,
+                            dateWatched : subscribedMovie[0].date
+                        }
+
+                        subscriberToMovie.push(subscribe);
+                    }
+                }
+            })
+            return{
+                id : movie._id,
+                name : movie.name,
+                premiered : movie.premiered,
+                genres : movie.genres,
+                image : movie.image.medium,
+                subscriberToMovie
+    
+            }
+        });
+    }
+        
+    return moviesSubscribers;
+
+}
+
 const subscribeToMovie = async (subscribedMovie) =>{
     let resp = await axios.post(subscriptionsUrl, subscribedMovie);
     return resp.data;
 
 }
 
-export default {getSubscriptions, getFullMembersSubscriptions, subscribeToMovie};
+export default {getSubscriptions, getFullMembersSubscriptions, getFullMoviesSubscriptions, subscribeToMovie};
