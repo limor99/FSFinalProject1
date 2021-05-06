@@ -1,5 +1,5 @@
 import React, {useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 
 import SubscribeToMovie from './SubscribeToMovieComp';
@@ -14,6 +14,8 @@ function MemberSubscriptionComp(props) {
     
   //  const [watchedMovies, setWatchedMovies] = useState(props.memberSubscriptions.movies);
     const [isShowUnsubscribeMovies, setIsShowUnsubscribeMovis] = useState(false);
+
+    const movies = useSelector(state => state.movies);
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -62,7 +64,7 @@ function MemberSubscriptionComp(props) {
                 <ul>
                     {
                         props.memberSubscriptions.movies.map(wm =>{
-                            return <li key={wm.id} className='watchedMovie'><Link to={`/movies/${wm.id}`}>{wm.name}</Link>, {moment(wm.watchedDate).format('DD/MM/YYYY')}</li>
+                            return <li key={wm.id} className='listElement'><Link to={`/movies/${wm.id}`}>{movies.filter(m => m._id === wm.id)[0].name}</Link>, {moment(wm.watchedDate).format('DD/MM/YYYY')}</li>
 
                         })
                     }

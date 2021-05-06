@@ -11,7 +11,7 @@ import membersUtil from '../../Utils/membersUtil';
 
 function EditMemberComp(props) {
     const [msg, setMsg] = useState();
-    const membersSubscriptions = useSelector(state => state.membersSubscriptions);
+    const members = useSelector(state => state.members);
     const dispatch = useDispatch();
     
 
@@ -57,12 +57,12 @@ function EditMemberComp(props) {
 
     useEffect(() => {
         let memberId = props.match.params.id;
-        let memberSubscriptions = membersSubscriptions.filter(ms => ms.id === memberId)[0];
+        let member = members.filter(m => m._id === memberId)[0];
         
         let fields = ['name', 'email', 'city'];
 
         fields.forEach(field => {
-            formik.setFieldValue(field, memberSubscriptions[field]);
+            formik.setFieldValue(field, member[field]);
         });
     }, [])
 
@@ -78,6 +78,7 @@ function EditMemberComp(props) {
                         id="name"
                         type="text"
                         {...formik.getFieldProps('name')}
+                        value={formik.values.name}
                     />
                     
                     {formik.touched.name && formik.errors.name ? (
@@ -90,6 +91,7 @@ function EditMemberComp(props) {
                         id="email"
                         type="email"
                         {...formik.getFieldProps('email')}
+                        value={formik.values.email}
                     />
                     
                     {formik.touched.email && formik.errors.email ? (
@@ -102,6 +104,7 @@ function EditMemberComp(props) {
                         id="city"
                         type="text"
                         {...formik.getFieldProps('city')}
+                        value={formik.values.city}                        
                     />
                     
                     {formik.touched.city && formik.errors.city ? (

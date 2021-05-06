@@ -96,7 +96,13 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions 
             let newMovie = action.payload;
             newMoviesArr = [...currentMovies, newMovie];
 
-            return {...state, movies : newMoviesArr};
+            let newMovieSubscribers = {
+                'id': newMovie._id,
+                'subscribersToMovie': []
+            }
+            newMovieSubscribers = [...currentmoviesSubscribers, newMovieSubscribers];
+
+            return {...state, movies : newMoviesArr, moviesSubscribers : newMovieSubscribers};
 
         case 'UpdateMovie':
             let currentMoviesCopy = [...state.movies] ;
@@ -116,38 +122,44 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions 
 
         case 'AddMember':
             let newMember = action.payload;
+
             let newMemberSubscription = {
                 'id' : newMember._id,
-                'name' : newMember.name,
-                'email' : newMember.email,
-                'city' : newMember.city,
                 'movies' : [],
-                'unwatched' : state.movies
+                'unwatched' : state.movies.map(m => {
+                    return {
+                        'id': m._id,
+                    }
+                })
+            
             }
+            newMembersArr = [...currentMembers, newMember];
             newMembersSubscriptionsArr = [...currentMembersSubscriptions, newMemberSubscription];
-            return {...state, membersSubscriptions : newMembersSubscriptionsArr};
+            return {...state, members : newMembersArr, membersSubscriptions : newMembersSubscriptionsArr};
 
         case 'UpdateMember':
-            let currentMembersSubscriptionsCopy = [...state.membersSubscriptions];
-            let memberToUpdateIndx = currentMembersSubscriptions.findIndex(cms => cms.id === action.payload.id);
+            let currentMembersCopy1 = [...state.members];
+            let memberToUpdateIndx = currentMembersCopy1.findIndex(cmc => cmc._id === action.payload.id);
             if(memberToUpdateIndx > -1){
                 let updatedMember = action.payload;
-                let currenMember = currentMembersSubscriptionsCopy[memberToUpdateIndx];
+                let currenMember = currentMembersCopy1[memberToUpdateIndx];
                 let memberToUpdate = {...currenMember, name: updatedMember.name, email: updatedMember.email, city: updatedMember.city};
-                currentMembersSubscriptionsCopy[memberToUpdateIndx] = memberToUpdate;
+                currentMembersCopy1[memberToUpdateIndx] = memberToUpdate;
             }
 
-            return {...state, membersSubscriptions : currentMembersSubscriptionsCopy};
+            return {...state, members : currentMembersCopy1};
 
         case 'DeleteMember':
                 let memberId = action.payload;
-                let currentMembersSubscriptionsCopy3 = [...state.membersSubscriptions];
-                let memberToDeleteIndx = currentMembersSubscriptionsCopy3.findIndex(cms => cms.id === memberId)
+                //let currentMembersSubscriptionsCopy3 = [...state.membersSubscriptions];
+                let currentMembersCopy = [...state.members];
+                //let memberToDeleteIndx = currentMembersSubscriptionsCopy3.findIndex(cms => cms.id === memberId)
+                let memberToDeleteIndx = currentMembersCopy.findIndex(cmc => cmc._id === memberId)
                 if(memberToDeleteIndx > -1){
-                    currentMembersSubscriptionsCopy3.splice(memberToDeleteIndx, 1);
+                    currentMembersCopy.splice(memberToDeleteIndx, 1);
                 }
                 
-                return {...state, membersSubscriptions : currentMembersSubscriptionsCopy3};
+                return {...state, members : currentMembersCopy};
 
         case 'SubscribeToMovie':
             let currentMembersSubscriptionsCopy2 = [...state.membersSubscriptions];
@@ -160,7 +172,7 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions 
                 let subscribedMember = currentMembersSubscriptionsCopy2[subscribedMemberIndx];
                 let watchedMovies = [...subscribedMember.movies];
                 let unwatchedMovies = [...subscribedMember.unwatched];
-                let subscribedMovieIndx = unwatchedMovies.findIndex(uwm => uwm._id === memberSubscribedMovie.selectedMovieId);
+                let subscribedMovieIndx = unwatchedMovies.findIndex(uwm => uwm.id === memberSubscribedMovie.selectedMovieId);
                 if(subscribedMovieIndx > -1){
                     let subscribedMovie = unwatchedMovies.splice(subscribedMovieIndx, 1);
                     subscribedMovie[0].watchedDate = memberSubscribedMovie.watchedDate;
@@ -173,29 +185,26 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions 
                 let movieSubscribersIndx = currentMoviesSubscribersCopy.findIndex(cms => cms.id === memberSubscribedMovie.selectedMovieId);
                 if(movieSubscribersIndx > -1){
                     let allMovieSubscribersData = currentMoviesSubscribersCopy[movieSubscribersIndx];
-                    let movieSubscribers = [...allMovieSubscribersData.subscriberToMovie];
+                    let movieSubscribers = [...allMovieSubscribersData.subscribersToMovie];
 
                     let memberId = subscribedMember.id;
-                    let memberName = subscribedMember.name;
                     let wathcedDate = memberSubscribedMovie.watchedDate;
     
                     let newMovieSubscribe = {
-                        memberId,
-                        memberName,memberName,
+                        'id': memberId,
                         dateWatched : wathcedDate
     
                     }
 
                     movieSubscribers.push(newMovieSubscribe);
 
-                    allMovieSubscribersData.subscriberToMovie = movieSubscribers;
+                    allMovieSubscribersData.subscribersToMovie = movieSubscribers;
                     currentMoviesSubscribersCopy[movieSubscribersIndx] = allMovieSubscribersData;
 
                 }
-            } 
-
+            }
+            
             return {...state, membersSubscriptions : currentMembersSubscriptionsCopy2, moviesSubscribers : currentMoviesSubscribersCopy};
-        
         case 'UpdateMsg':
             let newMsg = action.payload;
              return {...state, msg: newMsg}

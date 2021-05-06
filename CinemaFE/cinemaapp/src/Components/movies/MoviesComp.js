@@ -5,27 +5,33 @@ import MovieComp from './MovieComp';
 import MovieMenu from './menu/MovieMenu';
 
 function MoviesComp(props) {
-    //const movies = useSelector( state => state.movies);
-    const moviesSubscribers = useSelector(state => state.moviesSubscribers);
-    const [movieResult, setMoviesResult] = useState(moviesSubscribers);
+    const movies = useSelector( state => state.movies);
+    //const moviesSubscribers = useSelector(state => state.moviesSubscribers);
+    const [movieResult, setMoviesResult] = useState(movies);
     
     const search = (e) =>{
         let search = e.target.value;
 
-        let result = moviesSubscribers.filter(ms => ms.name.toLowerCase().indexOf(search.toLowerCase()) > -1);
+        let result = movies.filter(m => m.name.toLowerCase().indexOf(search.toLowerCase()) > -1);
         setMoviesResult(result);
     }  
+
+    useEffect(() => {
+        setMoviesResult(movies);
+    }, [movies])
     
     useEffect(() => {
         let selectedMovieId = props.match.params.id;
         if(selectedMovieId != undefined){
             let selectedMovie = movieResult.filter(mr => mr._id === selectedMovieId);
-            if(selectedMovie.length > -1){
+            if(selectedMovie.length > 0){
                 setMoviesResult(selectedMovie);
             }
         }
         
     }, [])
+
+   
 
     return (
         
@@ -39,7 +45,7 @@ function MoviesComp(props) {
             
             {    
                 movieResult.map(movie =>{
-                    return <MovieComp key={movie.id} movieSubscribers={movie}/>
+                    return <MovieComp key={movie._id} movie={movie}/>
                 })
             }
 

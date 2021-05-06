@@ -10,7 +10,7 @@ import Login from '../src/Components/LoginComp';
 import Main from './Components/MainComp';
 import Welcome from './Components/WelcomeComp';
 import Movies from './Components/movies/MoviesComp';
-import MembersSubscriptions from './Components/subscriptions/MembersSubscriptionsComp';
+import Members from './Components/subscriptions/MembersComp';
 import EditMember from './Components/subscriptions/EditMemberComp';
 import AddMember from './Components/subscriptions/AddMemberComp';
 import Header from './Components/HeaderComp';
@@ -59,7 +59,7 @@ function App() {
           let resp = await movieUtil.loadMovies();
           let movies = resp.movies;
          // let movie3 = movies.slice(0,2)
-
+        
           dispatch({
             type : "LoadMovies",
             payload : movies
@@ -78,7 +78,7 @@ function App() {
 
         //LoadMembersSubscriptions
         if(membersSubscriptions.length === 0){
-          let membersSubscriptions = await subscriptionsUtil.getFullMembersSubscriptions();
+          let membersSubscriptions = await subscriptionsUtil.getMembersSubscriptions();
 
           dispatch({
             type : "LoadMembersSubscriptions",
@@ -88,7 +88,7 @@ function App() {
 
         //LoadmoviesSubscribers
         if(moviesSubscribers.length === 0){
-          let moviesSubscribers = await subscriptionsUtil.getFullMoviesSubscriptions();
+          let moviesSubscribers = await subscriptionsUtil.getMoviesSubscriptions();
 
           dispatch({
             type : "LoadmoviesSubscribers",
@@ -122,13 +122,14 @@ function App() {
         <Route path="/movies/" component={Movies}/>
         <Route path="/addMovie" component={AddMovie}/>
         <Route path="/movie/:id" component={EditMovie}/>
-        <Route path="/subscriptions" component={MembersSubscriptions}/>
+        <Route path="/subscriptions/:id" component={Members}/>
+        <Route path="/subscriptions/" component={Members}/>
         <Route path="/subscription/:id" component={EditMember}/>
         <Route path="/addMember" component={AddMember}/>
         <Route path="/users" component={Users}/>
         <Route path="/addUser" component={AddUser}/>
         <Route path="/user/:id" component={EditUser}/>
-
+        
         <Route path="/nis" component={permissions}/>
         <Route path="/nis1" component={permissions1}/>
         

@@ -36,10 +36,25 @@ exports.updateMovie = async function(movie){
         updateMovie = response.data;
     }
     catch(err){
-        console.log(`An error occured while try to update movie: ${id} : ${err}`);
+        console.log(`An error occured while try to update movie: ${movie._id} : ${err}`);
     }
 
     return updateMovie;
+
+}
+
+exports.deleteMovie = async function(id){
+    let deleteMovie = null, response = null;
+    
+    try{
+        response = await moviesDAL.deleteMovie(id);
+        deleteMovie = response.data;
+    }
+    catch(err){
+        console.log(`An error occured while try to delete movie: ${id} : ${err}`);
+    }
+
+    return deleteMovie;
 
 }
 

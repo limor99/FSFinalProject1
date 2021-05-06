@@ -14,6 +14,10 @@ exports.updateMovie = function(movie){
     return axios.put(`${moviesWSUrl}${movie._id}`, movie);
 }
 
+exports.deleteMovie = function(id){
+    return axios.delete(`${moviesWSUrl}${id}`);
+}
+
 exports.addMovie = function(movie){
     return axios.post(`${moviesWSUrl}`, movie);
     

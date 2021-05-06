@@ -39,7 +39,7 @@ exports.subscribeToMovie = async function(subscribeMovie){
         "memberId" : subscribeMovie.memberId,
         "movies" : [
             {
-                "movieId" : subscribeMovie.subscribeMovieId ,
+                "movieId" : subscribeMovie.selectedMovieId ,
                 "date" : subscribeMovie.watchedDate
             }
         ]

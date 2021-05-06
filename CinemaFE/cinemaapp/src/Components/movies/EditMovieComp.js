@@ -82,8 +82,7 @@ function EditMovieComp(props) {
             }
 
             let resp = await moviesUtil.updateMovie(updatedMovie);
-            console.log(resp.data)
-
+            
             if(resp.success){
                 dispatch({
                     type: "UpdateMovie",

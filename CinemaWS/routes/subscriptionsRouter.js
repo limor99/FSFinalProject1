@@ -9,16 +9,8 @@ router.route('/').get(async function(req, res){
 })
 
 router.route('/').post(async function(req, res){
-    let memberId = req.body.memberId;
-    let subscribeMovieId = req.body.selectedMovieId;
-    let watchedDate = req.body.watchedDate;
-
-    let subscribeMovie = {
-        memberId,
-        subscribeMovieId,
-        watchedDate
-    }
-
+    let subscribeMovie = req.body;
+    
     let data  = await subscriptionsBL.subscribeToMovie(subscribeMovie);
     res.send(data);
 })

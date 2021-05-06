@@ -34,6 +34,7 @@ function SubscribeToMovieComp(props) {
     const [msg, setMsg] = useState('');
 
     const unwatchedMovies = useSelector(state => state.membersSubscriptions.filter(sms => sms.id === props.memberId))[0].unwatched;
+    const movies = useSelector(state => state.movies)
 
     const classes = useStyles();
    
@@ -97,13 +98,13 @@ function SubscribeToMovieComp(props) {
                         id="selectedMovie"
                         {...formik.getFieldProps('selectedMovie')}
                         onChange={handleSelectChange}
-                        value={unwatchedMovies.filter(uw => uw._id === selectedMovieId)[0] ? selectedMovieId : ''}
+                        value={unwatchedMovies.filter(uw => uw.id === selectedMovieId)[0] ? selectedMovieId : ''}
                         defaultValue={""}
                     >
 
                     {
                         unwatchedMovies.map(uw =>{
-                            return <MenuItem key={uw._id} value={uw._id}>{uw.name}</MenuItem>
+                            return <MenuItem key={uw.id} value={uw.id}>{movies.filter(m => m._id === uw.id)[0].name}</MenuItem>
                         })
                     }
                                         
