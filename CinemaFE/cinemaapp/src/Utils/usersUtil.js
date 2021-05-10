@@ -33,14 +33,4 @@ const getUsers = async () =>{
     return resp.data;
 }
 
-
-
-const test = async (token) =>{
-
-   // console.log(test)    
-    let resp = await axios.post(`${usersUrl}test`, token, {headers: {"Authorization" : `Bearer ${token}`}});
-//console.log(resp)
-    return resp.data;
-}
-
-export default {login, createAccount, addUser, test, getUsers, deleteUser, updateUser};
+export default {login, createAccount, addUser, getUsers, deleteUser, updateUser};

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {Redirect} from 'react-router-dom';
@@ -23,9 +23,6 @@ import createAccount from './Components/users/CreateAccountComp';
 import AddMovie from './Components/movies/AddMovieComp';
 import EditMovie from './Components/movies/EditMovieComp';
 
-
-import permissions from './Components/customField/PermossionComp';
-import permissions1 from './Components/customField/PermossionComp1';
 import usersUtil from './Utils/usersUtil';
 import movieUtil from '../src/Utils/movieUtil';
 import memberUtil from './Utils/membersUtil';
@@ -46,8 +43,6 @@ function App() {
   const dispatch = useDispatch();
   const userFullName = useSelector(state => state.userFullName);
 
-  const [hasPermission, setHasPermission] = useState(false);
-    
   useEffect(() => {
     // Using an IIFE
     (async function loadData() {
@@ -115,22 +110,7 @@ function App() {
         }
       })();
     }, []);
-/*
-    useEffect(() => {
-     console.log('again')
-    })
-*/
 
-/*function isHasPermission(permission){
-  if(sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes(permission)){
-    setHasPermission(true);
-  }
-
-  return hasPermission;
-
-
-}
-*/
 
   return (
     <div className="App">
@@ -196,9 +176,7 @@ function App() {
 
         <Route path="/main:/msg" component={Main}/>
 
-        <Route path="/nis" component={permissions}/>
-        <Route path="/nis1" component={permissions1}/>
-        
+      
       </Switch>
      
     </div>

@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ import usersUtil from '../../Utils/usersUtil';
 import './UserComp.css';
 
 function UserComp(props) {
-    const [msg, setMsg] = useState('');
+    //const [msg, setMsg] = useState('');
     const dispatch = useDispatch();
 
     const deleteUser = async (id) =>{

@@ -42,7 +42,7 @@ function MovieComp(props) {
             name: {props.movie.name} <br/>
             year: {props.movie.premiered.slice(0, 4)} <br/>
             genres: {props.movie.genres.join()} <br/>
-            image: <img className="imgSize" src={props.movie.image.medium}/> <br/>
+            image: <img className="imgSize" src={props.movie.image.medium} alt={props.movie.name}/> <br/>
             {
                  movieSubscribers.length === 0 ?
                  <div>There are no subscribers for this movie</div>

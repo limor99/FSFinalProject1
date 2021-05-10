@@ -3,17 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Link, useHistory } from 'react-router-dom';
-import moment from 'moment';
 
 import MovieMenu from './menu/MovieMenu';
 
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { red } from '@material-ui/core/colors';
 
 import './MovieComp.css';
 import moviesUtil from '../../Utils/movieUtil';
-import movieUtil from '../../Utils/movieUtil';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -34,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
 
 function EditMovieComp(props) {
     const [msg, setMsg] = useState('');
-    const [movie, setMovie] = useState(null);
     const movies = useSelector(state => state.movies);
 
     const classes = useStyles();

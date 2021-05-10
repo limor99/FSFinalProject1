@@ -124,7 +124,7 @@ const getMembersSubscriptions = async () => {
                 memberSubscribesMovies = subscription[0].movies;
                 let movie;
 
-                if(memberSubscribesMovies != undefined){
+                if(memberSubscribesMovies !== undefined){
                     memberMovies = memberSubscribesMovies.map(mi =>{
                         subscribeMoviesIds.push(mi.movieId)
                         movie = movies.filter(m => mi.movieId === m._id);
@@ -166,67 +166,6 @@ const getMembersSubscriptions = async () => {
     return subscriptionsMovies;
 
 }
-
-/*
-const getFullMoviesSubscriptions = async () => {
-    let moviesSubscribers = null; //the movies's subscriptions (each movie and it's subscribers)
-    let membersResp = await membersUtils.loadMembers();
-    let moviesResp = await moviesUtils.loadMovies();
-    let subscriptionsResp = await getSubscriptions();
-    let members, movies, subscriptions;
-
-    if(moviesResp){
-        movies = moviesResp.movies;
-    }
-    
-    if(membersResp){
-        members = membersResp.members;
-    }
-
-    if(subscriptionsResp){
-        subscriptions = subscriptionsResp.subscriptions;
-    }
-
-    if(subscriptions && movies && members)
-    {
-        moviesSubscribers = movies.map(movie => {
-            let subscriberToMovie = [];
-            subscriptions.forEach(s =>{
-                let subscribedMovies = s.movies;
-                let subscribedMovie = subscribedMovies.filter(sm => sm.movieId === movie._id);
-                if(subscribedMovie.length > 0){
-                    let memberName;
-                    let memberId = s.memberId;
-                    let member = members.filter(mem => mem._id === memberId);
-                    if(member.length > 0){
-                        memberName = member[0].name;
-
-                        let subscribe = {
-                            memberId : memberId,
-                            memberName : memberName,
-                            dateWatched : subscribedMovie[0].date
-                        }
-
-                        subscriberToMovie.push(subscribe);
-                    }
-                }
-            })
-            return{
-                id : movie._id,
-                name : movie.name,
-                premiered : movie.premiered,
-                genres : movie.genres,
-                image : movie.image.medium,
-                subscriberToMovie
-    
-            }
-        });
-    }
-        
-    return moviesSubscribers;
-
-}
-*/
 
 const getMoviesSubscriptions = async () => {
     let moviesSubscribers = null; //the movies's subscriptions (each movie and it's subscribers)

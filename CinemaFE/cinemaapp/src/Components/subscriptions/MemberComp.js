@@ -2,7 +2,6 @@ import React, { useState} from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import MemberSubscriptions from './MemberSubscriptionsComp';
 import SubscribeToMovie from './SubscribeToMovieComp';
 
 import membersUtil from '../../Utils/membersUtil';

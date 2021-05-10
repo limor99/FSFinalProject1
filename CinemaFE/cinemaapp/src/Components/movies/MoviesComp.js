@@ -11,7 +11,6 @@ function MoviesComp(props) {
     const [movieResult, setMoviesResult] = useState(movies);
     const [hasPermission, setHasPermission] =useState((sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('View Movies')))
     
-    const history = useHistory();
     const search = (e) =>{
         let search = e.target.value;
 
@@ -32,12 +31,7 @@ function MoviesComp(props) {
                     setMoviesResult(selectedMovie);
                 }
             }
-        
-        
-        
     }, [])
-
-   
 
     return (
         

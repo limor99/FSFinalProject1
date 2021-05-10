@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import TextField from '@material-ui/core/TextField';
 
 import MemberMenu from './menu/MemberMenu';
 import membersUtil from '../../Utils/membersUtil';

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { userHistory, Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import MovieMenu from './menu/MovieMenu';
 
@@ -36,8 +36,7 @@ function AddMovieComp() {
     const classes = useStyles();
 
     const dispatch = useDispatch();
-    const history = useHistory();
-   
+       
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -103,14 +102,14 @@ function AddMovieComp() {
               
 
     });
-
+/*
     const handleChange = (e) =>{
         formik.handleChange(e);
         alert(e.target.value)
         console.log(formik.values.name)
         
     }
-
+*/
     return (
         <React.Fragment>
             <MovieMenu/>

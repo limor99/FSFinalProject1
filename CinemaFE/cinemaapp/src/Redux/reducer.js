@@ -1,6 +1,3 @@
-import { act } from '@testing-library/react';
-import movieUtil from '../../src/Utils/movieUtil';
-
 function reducer(state = { users : [], movies : [], members : [], subscriptions : [], membersSubscriptions: [], moviesSubscribers: [], counter: 0, userFullName: '', msg: ''}, action){
     let currentUsers = state.users;
     let newUsersArr = null;
