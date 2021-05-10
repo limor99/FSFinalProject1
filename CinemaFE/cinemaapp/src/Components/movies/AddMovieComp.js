@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 function AddMovieComp() {
     const [msg, setMsg] = useState('');
+    const [hasPermission, setHasPermission] = useState((sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('Create Movies')))
     const classes = useStyles();
 
     const dispatch = useDispatch();
@@ -113,74 +114,81 @@ function AddMovieComp() {
     return (
         <React.Fragment>
             <MovieMenu/>
-            {msg}
-            <form onSubmit={formik.handleSubmit}>
-                <label htmlFor="name">Name</label>
+            { !hasPermission ?
+                <div>You have no permission to create movies</div>
+                :
 
-                <input
-                    id="name"
-                    type="text"
-                    {...formik.getFieldProps('name')}
-                />
+            <div>
+                {msg}
+                <form onSubmit={formik.handleSubmit}>
+                    <label htmlFor="name">Name</label>
 
-              
-                {formik.touched.name && formik.errors.name ? (
-                    <div>{formik.errors.name}</div>
-                ) : null}
+                    <input
+                        id="name"
+                        type="text"
+                        {...formik.getFieldProps('name')}
+                    />
 
-                <br/>
-
-                <label htmlFor="genres">Genres</label>
-                <input
-                    id="genres"
-                    type="text"
-                    {...formik.getFieldProps('genres')}
-                />
-                {formik.touched.genres && formik.errors.genres ? (
-                    <div>{formik.errors.genres}</div>
-                ) : null}
-
-                <br/>
-
-                <label htmlFor="imageUrl">Image Url</label>
-                <input
-                    id="imageUrl"
-                    type="text"
-                    {...formik.getFieldProps('imageUrl')}
-                />
-                {formik.touched.imageUrl && formik.errors.imageUrl ? (
-                    <div>{formik.errors.imageUrl}</div>
-                ) : null}
                 
-                <br/>
-                <label htmlFor="premiered">Premiered</label>
+                    {formik.touched.name && formik.errors.name ? (
+                        <div>{formik.errors.name}</div>
+                    ) : null}
 
-                <TextField 
-                    id="premiered"
-                    label="Premiered"
-                    type="date"
-                    format={'dd/mm/yyyy'}
-                    onChange={formik.handleChange}
-                    {...formik.getFieldProps('premiered')}
+                    <br/>
+
+                    <label htmlFor="genres">Genres</label>
+                    <input
+                        id="genres"
+                        type="text"
+                        {...formik.getFieldProps('genres')}
+                    />
+                    {formik.touched.genres && formik.errors.genres ? (
+                        <div>{formik.errors.genres}</div>
+                    ) : null}
+
+                    <br/>
+
+                    <label htmlFor="imageUrl">Image Url</label>
+                    <input
+                        id="imageUrl"
+                        type="text"
+                        {...formik.getFieldProps('imageUrl')}
+                    />
+                    {formik.touched.imageUrl && formik.errors.imageUrl ? (
+                        <div>{formik.errors.imageUrl}</div>
+                    ) : null}
                     
-                    
-                    className={classes.date}
-                    
-                    InputLabelProps={{
-                    shrink: true,
-                    
-                    
-                    }}
-                    
-                    
-                />
-                {formik.touched.premiered && formik.errors.premiered ? (
-                    <div>{formik.errors.premiered}</div>
-                ) : null}
-<br/>
-                <button type='submit'>Submit</button>
-                <button><Link to="/movies">Cancel</Link></button>
-            </form>
+                    <br/>
+                    <label htmlFor="premiered">Premiered</label>
+
+                    <TextField 
+                        id="premiered"
+                        label="Premiered"
+                        type="date"
+                        format={'dd/mm/yyyy'}
+                        onChange={formik.handleChange}
+                        {...formik.getFieldProps('premiered')}
+                        
+                        
+                        className={classes.date}
+                        
+                        InputLabelProps={{
+                        shrink: true,
+                        
+                        
+                        }}
+                        
+                        
+                    />
+                    {formik.touched.premiered && formik.errors.premiered ? (
+                        <div>{formik.errors.premiered}</div>
+                    ) : null}
+    <br/>
+                    <button type='submit'>Submit</button>
+                    <button><Link to="/movies">Cancel</Link></button>
+                </form>
+            </div>
+        }
             
         </React.Fragment>
     )

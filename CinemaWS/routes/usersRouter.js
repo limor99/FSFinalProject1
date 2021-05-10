@@ -37,8 +37,8 @@ router.route('/login').post(async function(req, res){
     let user = req.body;
     let response = await usersBL.isUserLogin(user);
 
-    if(response.succeed){
-        console.log(req.headers)
+    if(response.success){
+        console.log('login success:' +req.headers);
         res.status(200).json(response);
     }
     else{
@@ -130,7 +130,7 @@ router.route('/').put(async function(req, res){
 
 
  
-router.route('/test').post(checkAuth, async function(req, res){
+router.route('/test').post(checkAuth('blabla'), async function(req, res){
     console.log("here i am");
     const authHeader = req.headers.authorization;
 
@@ -142,6 +142,7 @@ router.route('/test').post(checkAuth, async function(req, res){
 
    
 })
+
 
 /*
 router.post('/test', checkAuth, async function(req, res){

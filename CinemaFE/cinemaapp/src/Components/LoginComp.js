@@ -52,6 +52,9 @@ function LoginComp(props) {
             payload : resp.userFullName
           });
 
+          const permissions = resp.permissions;
+          sessionStorage.setItem('permissions', permissions);
+
           history.push("/main");    
       }
       else{

@@ -3,18 +3,20 @@ const router = express.Router();
 
 const moviesBL = require('../models/movies/moviesBL');
 
-router.route('/').get(async function(req, res){
+const checkAuth = require('../middlelwares/checkAuth');
+
+router.route('/').get(checkAuth('View Movies'), async function(req, res){
     let data  = await moviesBL.getMovies();
     res.send(data);
 })
 
-router.route('/:id').get(async function(req, res){
+router.route('/:id').get(checkAuth('View Movies'), async function(req, res){
     let id = req.params.id;
     let data = await moviesBL.getMovieById(id);
     res.send(data);
 })
 
-router.route('/').put(async function(req, res){
+router.route('/').put(checkAuth('Update Movies'), async function(req, res){
     let updatedMovie = req.body;
 
     let data = await moviesBL.updateMovie(updatedMovie);
@@ -22,7 +24,7 @@ router.route('/').put(async function(req, res){
     res.send(data);
 })
 
-router.route('/').post(async function(req, res){
+router.route('/').post(checkAuth('Create Movies'), async function(req, res){
     let addedMovie = req.body;
 
     let data = await moviesBL.addMovie(addedMovie);
@@ -30,7 +32,7 @@ router.route('/').post(async function(req, res){
     res.send(data);
 })
 
-router.route('/:id').delete(async function(req, res){
+router.route('/:id').delete(checkAuth('Delete Movies'), async function(req, res){
     let id = req.params.id;
 
     let isDeleted = await moviesBL.deleteMovie(id);

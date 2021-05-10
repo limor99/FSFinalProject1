@@ -10,7 +10,8 @@ const loadMovies = async() =>{
 const addMovie = async (newMovie) =>{
     let resp = {};
     try{
-        resp = await axios.post(moviesUrl, newMovie);
+        let token = sessionStorage.getItem("id");
+        resp = await axios.post(moviesUrl, newMovie, {headers: {"Authorization" : `Bearer ${token}`}});
         
     }
     catch(err){

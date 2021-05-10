@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import {Redirect} from 'react-router-dom';
+
 import './App.css';
 
 import { Route, Switch } from 'react-router-dom';
@@ -29,17 +31,22 @@ import movieUtil from '../src/Utils/movieUtil';
 import memberUtil from './Utils/membersUtil';
 import subscriptionsUtil from './Utils/subscriptionsUtil';
 
+const NO_PERMISSION_MSG = 'You have no permission to';
+const CONTACT_ADMIN_MSG = 'please contact with Adminstrator';
+
 function App() {
 
   const users = useSelector(state => state.users);
   const movies = useSelector(state => state.movies);
   const members = useSelector(state => state.members);
- const membersSubscriptions = useSelector(state => state.membersSubscriptions);
+  const membersSubscriptions = useSelector(state => state.membersSubscriptions);
   const subscriptions = useSelector(state => state.subscriptions);
   const moviesSubscribers = useSelector(state => state.moviesSubscribers)
 
   const dispatch = useDispatch();
   const userFullName = useSelector(state => state.userFullName);
+
+  const [hasPermission, setHasPermission] = useState(false);
     
   useEffect(() => {
     // Using an IIFE
@@ -108,28 +115,87 @@ function App() {
         }
       })();
     }, []);
+/*
+    useEffect(() => {
+     console.log('again')
+    })
+*/
+
+/*function isHasPermission(permission){
+  if(sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes(permission)){
+    setHasPermission(true);
+  }
+
+  return hasPermission;
+
+
+}
+*/
 
   return (
     <div className="App">
         {userFullName !== '' ? <Header userFullName={userFullName} /> : userFullName}
+
+      
           
       <Switch>
         <Route exact path="/" component={Welcome}/>
         <Route path="/login" component={Login}/>
         <Route path="/createAccount" component={createAccount}/>
         <Route path="/main" component={Main}/>
+        
+
         <Route path="/movies/:id" component={Movies}/>
         <Route path="/movies/" component={Movies}/>
+
+
         <Route path="/addMovie" component={AddMovie}/>
+
         <Route path="/movie/:id" component={EditMovie}/>
-        <Route path="/subscriptions/:id" component={Members}/>
-        <Route path="/subscriptions/" component={Members}/>
-        <Route path="/subscription/:id" component={EditMember}/>
-        <Route path="/addMember" component={AddMember}/>
+
+
+        <Route path="/subscriptions/:id"  render = {() => 
+          sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('View Subscriptions') ?  (<Members />) : 
+              (<Redirect to={{  pathname: "/main",
+                                  state: { msg: `${NO_PERMISSION_MSG} View Subscriptions, ${CONTACT_ADMIN_MSG}` }
+                              }}
+                />)}
+        />
+
+
+        
+        <Route path="/subscriptions"  render = {() => 
+          sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('View Subscriptions') ?  (<Members />) : 
+              (<Redirect to={{  pathname: "/main",
+                                  state: { msg: `${NO_PERMISSION_MSG} View Subscriptions, ${CONTACT_ADMIN_MSG}` }
+                              }}
+                />)}
+        />
+
+        <Route path="/subscription/:id"  render = {() => 
+          sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('Update Subscriptions') ?  (<EditMember />) : 
+              (<Redirect to={{  pathname: "/main",
+                                  state: { msg: `${NO_PERMISSION_MSG} Update Subscriptions, ${CONTACT_ADMIN_MSG}` }
+                              }}
+                />)}
+        />
+
+        <Route path="/addMember"  render = {() => 
+          sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('Create Subscriptions') ?  (<AddMember />) : 
+              (<Redirect to={{  pathname: "/main",
+                                  state: { msg: `${NO_PERMISSION_MSG} Create Subscriptions, ${CONTACT_ADMIN_MSG}` }
+                              }}
+                />)}
+        />
+
+       
+
         <Route path="/users" component={Users}/>
         <Route path="/addUser" component={AddUser}/>
         <Route path="/user/:id" component={EditUser}/>
-        
+
+        <Route path="/main:/msg" component={Main}/>
+
         <Route path="/nis" component={permissions}/>
         <Route path="/nis1" component={permissions1}/>
         

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+
+import Button from '@material-ui/core/Button';
 
 import moment from 'moment';
 
@@ -10,7 +12,9 @@ import moviesUtil from '../../Utils/movieUtil';
 
 function MovieComp(props) {
     const movieSubscribers = useSelector(state => state.moviesSubscribers.filter(stm => stm.id === props.movie._id)[0].subscribersToMovie);
-    const members = useSelector(state => state.members)
+    const members = useSelector(state => state.members);
+    const [hasPermissionToDelete, setHasPermissionToDelete] = useState((sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('Delete Movies')))
+    const [hasPermissionToUpdate, setHasPermissionToUpdate] = useState((sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('Update Movies')))
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -52,8 +56,15 @@ function MovieComp(props) {
                  </ul>
             }
 
-            <button><Link to={`/movie/${props.movie._id}`}>Edit</Link></button>
-            <input type="button" value="Delete" onClick={() => deleteMovie(props.movie._id)}/>
+            {
+                hasPermissionToUpdate ?
+                    <Button color="primary" variant="outlined"><Link to={`/movie/${props.movie._id}`}>Edit</Link></Button>
+                :
+                <Button color="primary" variant="outlined" disabled><Link to={`/movie/${props.movie._id}`}>Edit</Link></Button>
+
+            }
+            
+            <input type="button" value="Delete" disabled = {!hasPermissionToDelete} onClick={() => deleteMovie(props.movie._id)}/>
 
 
         </div>

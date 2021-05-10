@@ -3,19 +3,21 @@ const router = express.Router();
 
 const membersBL = require('../models/members/membersBL');
 
-router.route('/').get(async function(req, res){
+const checkAuth = require('../middlelwares/checkAuth');
+
+router.route('/').get(checkAuth('View Subscriptions'), async function(req, res){
     let data  = await membersBL.getMembers();
     res.send(data);
     
 })
 
-router.route('/:id').get(async function(req, res){
+router.route('/:id').get(checkAuth('View Subscriptions'), async function(req, res){
     let id = req.params.id;
     let data = await membersBL.getMemberById(id)
     res.send(data);
 })
 
-router.route('/').post(async function(req, res){
+router.route('/').post(checkAuth('Create Subscriptions'), async function(req, res){
     let addedMemeber = req.body;
 
     let data = await membersBL.addMember(addedMemeber);
@@ -23,7 +25,7 @@ router.route('/').post(async function(req, res){
     res.send(data);
 })
 
-router.route('/:id').put(async function(req, res){
+router.route('/:id').put(checkAuth('Update Subscriptions'), async function(req, res){
     let id = req.params.id;
     let updateMember = req.body;
 
@@ -32,7 +34,7 @@ router.route('/:id').put(async function(req, res){
     res.send(data);
 })
 
-router.route('/:id').delete(async function(req, res){
+router.route('/:id').delete(checkAuth('Delete Subscriptions'), async function(req, res){
     let id = req.params.id;
     
     let data = await membersBL.deleteMember(id);

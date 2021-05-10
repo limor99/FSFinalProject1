@@ -57,7 +57,8 @@ exports.isUserLogin = async function(user){
             success: true,
             message: "Authorization successful",
             token,
-            userFullName: `${userData.firstName} ${userData.lastName}`
+            userFullName: `${userData.firstName} ${userData.lastName}`,
+            permissions: userData.permissions
         }
 
         return response;
