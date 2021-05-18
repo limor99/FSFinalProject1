@@ -10,6 +10,8 @@ import membersUtil from '../../Utils/membersUtil';
 
 function AddMemberComp() {
     const [msg, setMsg] = useState('');
+    const [hasPermission, setHasPermission] = useState((sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('Create Member')))
+
     const dispatch = useDispatch();
     const formik = useFormik({
         initialValues: {
@@ -54,50 +56,57 @@ function AddMemberComp() {
     return (
         <React.Fragment>
             <MemberMenu/>
-            {msg}
-            <form onSubmit={formik.handleSubmit}>
+            {
+                !hasPermission ?
+                <div>You have no permission to create members</div>
+                :
+                <div>
+                    {msg}
+                    <form onSubmit={formik.handleSubmit}>
 
-                <label htmlFor="name">Name</label>
-                <input
-                    id="name"
-                    type="text"
-                    {...formik.getFieldProps('name')}
-                />
-                
-                {formik.touched.name && formik.errors.name ? (
-                    <div>{formik.errors.name}</div>
-                ) : null}
-                <br/>
+                        <label htmlFor="name">Name</label>
+                        <input
+                            id="name"
+                            type="text"
+                            {...formik.getFieldProps('name')}
+                        />
+                        
+                        {formik.touched.name && formik.errors.name ? (
+                            <div>{formik.errors.name}</div>
+                        ) : null}
+                        <br/>
 
-                <label htmlFor="email">Email</label>
-                <input
-                    id="email"
-                    type="email"
-                    {...formik.getFieldProps('email')}
-                />
-                
-                {formik.touched.email && formik.errors.email ? (
-                    <div>{formik.errors.email}</div>
-                ) : null}
-                <br/>
+                        <label htmlFor="email">Email</label>
+                        <input
+                            id="email"
+                            type="email"
+                            {...formik.getFieldProps('email')}
+                        />
+                        
+                        {formik.touched.email && formik.errors.email ? (
+                            <div>{formik.errors.email}</div>
+                        ) : null}
+                        <br/>
 
-                 <label htmlFor="city">City</label>
-                <input
-                    id="city"
-                    type="text"
-                    {...formik.getFieldProps('city')}
-                />
-                
-                {formik.touched.city && formik.errors.city ? (
-                    <div>{formik.errors.city}</div>
-                ) : null}
-                <br/>
+                        <label htmlFor="city">City</label>
+                        <input
+                            id="city"
+                            type="text"
+                            {...formik.getFieldProps('city')}
+                        />
+                        
+                        {formik.touched.city && formik.errors.city ? (
+                            <div>{formik.errors.city}</div>
+                        ) : null}
+                        <br/>
 
-                <button type='submit'>Submit</button>
-                <button><Link to="/subscriptions">Cancel</Link></button>
+                        <button type='submit'>Submit</button>
+                        <button><Link to="/subscriptions">Cancel</Link></button>
 
 
-            </form>
+                    </form>
+                </div>
+            }
         </React.Fragment>
         
     )

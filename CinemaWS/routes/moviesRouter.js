@@ -5,7 +5,8 @@ const moviesBL = require('../models/movies/moviesBL');
 
 const checkAuth = require('../middlelwares/checkAuth');
 
-router.route('/').get(checkAuth('View Movies'), async function(req, res){
+//router.route('/').get(checkAuth('View Movies'), async function(req, res){
+router.route('/').get(async function(req, res){
     let data  = await moviesBL.getMovies();
     res.send(data);
 })

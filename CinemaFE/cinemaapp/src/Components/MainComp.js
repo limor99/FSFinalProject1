@@ -15,7 +15,6 @@ function MainComp(props) {
  return (
     <div className="App">
       
-      {sessionStorage.getItem("userName") ? <Header userName={sessionStorage.getItem("userName")}/> : ''}
       <h1>Main page</h1>
 
       {msg}

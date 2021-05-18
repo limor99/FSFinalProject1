@@ -2,6 +2,8 @@ import React, { useState} from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
+import Button from '@material-ui/core/Button';
+
 import SubscribeToMovie from './SubscribeToMovieComp';
 
 import membersUtil from '../../Utils/membersUtil';
@@ -16,6 +18,9 @@ function MemberComp(props) {
 
     const movies = useSelector(state => state.movies)
     const moviesSubscribed = useSelector(state => state.membersSubscriptions.filter(ms => ms.id === props.member._id)[0].movies);
+
+    const [hasPermissionToDelete, setHasPermissionToDelete] = useState((sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('Delete Subscriptions')))
+    const [hasPermissionToUpdate, setHasPermissionToUpdate] = useState((sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('Update Subscriptions')))
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -50,11 +55,17 @@ function MemberComp(props) {
            Email: {props.member.email} <br/>
            City: {props.member.city} <br/>
 
-           <button><Link to={`/subscription/${props.member._id}`}>Edit</Link></button>
-           <input type="button" value="Delete" onClick={() => deleteMember(props.member._id)}/>
+           {
+               hasPermissionToUpdate ?
+                    <Button color="primary" variant="outlined"><Link to={`/subscription/${props.member._id}`}>Edit</Link></Button>
+               :
+               <Button color="primary" variant="outlined" disabled><Link to={`/subscription/${props.member._id}`}>Edit</Link></Button>
+           }
+
+           <input type="button" value="Delete" disabled = {!hasPermissionToDelete} onClick={() => deleteMember(props.member._id)}/>
 
            <h5>Movies Watched</h5>
-            <button onClick={() => subscribeToMovie()} >subscribe To New Movie</button>
+           <button onClick={() => subscribeToMovie()} >subscribe To New Movie</button>
 
             {isShowUnsubscribeMovies ? <SubscribeToMovie memberId={props.member._id} /> : null}
             {

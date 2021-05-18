@@ -1,6 +1,8 @@
 import axios from 'axios';
+import globalUtil from './globalUtil';
 
 const moviesUrl = 'http://localhost:5000/api/movies/';
+
                    
 const loadMovies = async() =>{
     let resp = await axios.get(moviesUrl);
@@ -10,9 +12,10 @@ const loadMovies = async() =>{
 const addMovie = async (newMovie) =>{
     let resp = {};
     try{
-        let token = sessionStorage.getItem("id");
-        resp = await axios.post(moviesUrl, newMovie, {headers: {"Authorization" : `Bearer ${token}`}});
+        const header = globalUtil.getHeader();
         
+        //header structure:  {headers: {"Authorization" : `Bearer ${token}`}});
+        resp = await axios.post(moviesUrl, newMovie, header);
     }
     catch(err){
         console.log(`An Error occured while try to add new movie: ${err}`);
@@ -31,7 +34,9 @@ const updateMovie = async (updatedMovie) =>{
     let resp = {};
     
     try{
-        resp = await axios.put(moviesUrl, updatedMovie);
+        const header = globalUtil.getHeader();
+        //resp = await axios.put(moviesUrl, updatedMovie);
+        resp = await axios.put(moviesUrl, updatedMovie, header);
     }
     catch(err){
         console.log(`An Error occured while try to update movie: ${err}`);
@@ -47,7 +52,21 @@ const updateMovie = async (updatedMovie) =>{
 }
 
 const deleteMovie = async (id) =>{
-    let resp = await axios.delete(`${moviesUrl}${id}`);
+    let resp = {};
+    
+    try{
+        const header = globalUtil.getHeader();
+        //resp = await axios.delete(`${moviesUrl}${id}`);
+        resp = await axios.delete(`${moviesUrl}${id}`, header);
+    }
+    catch(err){
+        console.log(`An Error occured while try to delete movie: ${err}`);
+        resp.data = {
+            succrss : false,
+            msg : 'An Error occured while try to delete movie'
+        }
+    }
+
     return resp.data;
 }
 

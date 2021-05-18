@@ -114,7 +114,7 @@ function App() {
 
   return (
     <div className="App">
-        {userFullName !== '' ? <Header userFullName={userFullName} /> : userFullName}
+        {userFullName !== '' ? <Header userFullName={userFullName} /> : ''}
 
       
           
@@ -123,60 +123,23 @@ function App() {
         <Route path="/login" component={Login}/>
         <Route path="/createAccount" component={createAccount}/>
         <Route path="/main" component={Main}/>
+        <Route path="/main:/msg" component={Main}/>
         
-
         <Route path="/movies/:id" component={Movies}/>
         <Route path="/movies/" component={Movies}/>
-
-
         <Route path="/addMovie" component={AddMovie}/>
-
         <Route path="/movie/:id" component={EditMovie}/>
 
 
-        <Route path="/subscriptions/:id"  render = {() => 
-          sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('View Subscriptions') ?  (<Members />) : 
-              (<Redirect to={{  pathname: "/main",
-                                  state: { msg: `${NO_PERMISSION_MSG} View Subscriptions, ${CONTACT_ADMIN_MSG}` }
-                              }}
-                />)}
-        />
-
-
-        
-        <Route path="/subscriptions"  render = {() => 
-          sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('View Subscriptions') ?  (<Members />) : 
-              (<Redirect to={{  pathname: "/main",
-                                  state: { msg: `${NO_PERMISSION_MSG} View Subscriptions, ${CONTACT_ADMIN_MSG}` }
-                              }}
-                />)}
-        />
-
-        <Route path="/subscription/:id"  render = {() => 
-          sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('Update Subscriptions') ?  (<EditMember />) : 
-              (<Redirect to={{  pathname: "/main",
-                                  state: { msg: `${NO_PERMISSION_MSG} Update Subscriptions, ${CONTACT_ADMIN_MSG}` }
-                              }}
-                />)}
-        />
-
-        <Route path="/addMember"  render = {() => 
-          sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('Create Subscriptions') ?  (<AddMember />) : 
-              (<Redirect to={{  pathname: "/main",
-                                  state: { msg: `${NO_PERMISSION_MSG} Create Subscriptions, ${CONTACT_ADMIN_MSG}` }
-                              }}
-                />)}
-        />
-
+        <Route path="/subscriptions/:id"  component={Members}/>
+        <Route path="/subscriptions/"  component={Members}/>
+        <Route path="/subscription/:id" component={EditMember}/>
+        <Route path="/addMember" component={AddMember}/>
        
 
         <Route path="/users" component={Users}/>
         <Route path="/addUser" component={AddUser}/>
         <Route path="/user/:id" component={EditUser}/>
-
-        <Route path="/main:/msg" component={Main}/>
-
-      
       </Switch>
      
     </div>

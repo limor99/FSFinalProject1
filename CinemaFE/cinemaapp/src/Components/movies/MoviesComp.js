@@ -7,9 +7,8 @@ import MovieMenu from './menu/MovieMenu';
 
 function MoviesComp(props) {
     const movies = useSelector( state => state.movies);
-    //const moviesSubscribers = useSelector(state => state.moviesSubscribers);
     const [movieResult, setMoviesResult] = useState(movies);
-    const [hasPermission, setHasPermission] =useState((sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('View Movies')))
+    const [hasPermission, setHasPermission] = useState((sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('View Movies')))
     
     const search = (e) =>{
         let search = e.target.value;
@@ -23,14 +22,13 @@ function MoviesComp(props) {
     }, [movies])
     
     useEffect(() => {
-        
-            let selectedMovieId = props.match.params.id;
-            if(selectedMovieId != undefined){
-                let selectedMovie = movieResult.filter(mr => mr._id === selectedMovieId);
-                if(selectedMovie.length > 0){
-                    setMoviesResult(selectedMovie);
-                }
+        let selectedMovieId = props.match.params.id;
+        if(selectedMovieId != undefined){
+            let selectedMovie = movieResult.filter(mr => mr._id === selectedMovieId);
+            if(selectedMovie.length > 0){
+                setMoviesResult(selectedMovie);
             }
+        }
     }, [])
 
     return (

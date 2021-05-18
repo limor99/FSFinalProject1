@@ -1,4 +1,4 @@
-function reducer(state = { users : [], movies : [], members : [], subscriptions : [], membersSubscriptions: [], moviesSubscribers: [], counter: 0, userFullName: '', msg: ''}, action){
+function reducer(state = { users : [], movies : [], members : [], subscriptions : [], membersSubscriptions: [], moviesSubscribers: [], userFullName: '', msg: ''}, action){
     let currentUsers = state.users;
     let newUsersArr = null;
     
@@ -18,19 +18,6 @@ function reducer(state = { users : [], movies : [], members : [], subscriptions 
     let newSubscriptionsArr = null;
 
     switch (action.type){
-        case 'LoadData':
-         //   let movies = action.payload;
-           // let movies3 = movies.slice(0, 2);
-          // console.log(' mpvies in payload')
-
-           // console.table(movies);
-
-         //       let currentMovies = state.movies;
-           //     currentMovies = currentMovies.concat(movies)
-            //    console.log('all movies after we load')
-             //   console.log(currentMovies)
-
-                return { ...state, movies: currentMovies};
         case 'LoadUsers':
             let users = action.payload;
             newUsersArr = [...currentUsers, ...users];

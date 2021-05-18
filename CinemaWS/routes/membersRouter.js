@@ -5,7 +5,8 @@ const membersBL = require('../models/members/membersBL');
 
 const checkAuth = require('../middlelwares/checkAuth');
 
-router.route('/').get(checkAuth('View Subscriptions'), async function(req, res){
+//router.route('/').get(checkAuth('View Subscriptions'), async function(req, res){
+router.route('/').get(async function(req, res){
     let data  = await membersBL.getMembers();
     res.send(data);
     

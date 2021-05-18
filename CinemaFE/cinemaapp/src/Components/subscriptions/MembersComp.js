@@ -8,6 +8,7 @@ function MembersComp(props) {
     const members = useSelector(state => state.members);
     const [displayMembers, setDispalyMembers] = useState(members)
     const msg = useSelector(state => state.msg)
+    const [hasPermission, setHasPermission] =useState((sessionStorage.getItem("permissions") !== null && sessionStorage.getItem("permissions").includes('View Subscriptions')))
     
     useEffect(() => {
         let memberId = props.match.params.id;
@@ -24,16 +25,22 @@ function MembersComp(props) {
         <div className=''>
             <MemberMenu/>
             {msg}
-            <div className='subscribers'>
-                All Members Subscriptions
-
-                {
-                    displayMembers.map(m =>{
-                        return <Member key={m._id} member={m} />
-
-                    })
-                }
-            </div>
+            {
+                !hasPermission ? 
+                <div>You have no permission to view members</div>
+                :
+                <div className='subscribers'>
+                    All Members Subscriptions
+    
+                    {
+                        displayMembers.map(m =>{
+                            return <Member key={m._id} member={m} />
+    
+                        })
+                    }
+                </div>
+            }
+            
         </div>
 
         
