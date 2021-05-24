@@ -6,7 +6,7 @@ import './WelcomeComp.css';
 
 function WelcomeComp() {
     return (
-        <div className="App">
+        <div className="App welcome">
             <div className="name">MovieX</div>
             <div className="toLogin">
                 <Link to="/login">Let's start</Link>
