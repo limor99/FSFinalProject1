@@ -22,15 +22,16 @@ function MembersComp(props) {
     }, [])
 
     return (
-        <div className=''>
+        <div className='members services'>
             <MemberMenu/>
+            <h1>All Members Subscriptions</h1>
             {msg}
             {
                 !hasPermission ? 
                 <div>You have no permission to view members</div>
                 :
                 <div className='subscribers'>
-                    All Members Subscriptions
+                    
     
                     {
                         displayMembers.map(m =>{

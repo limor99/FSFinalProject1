@@ -28,6 +28,9 @@ import movieUtil from '../src/Utils/movieUtil';
 import memberUtil from './Utils/membersUtil';
 import subscriptionsUtil from './Utils/subscriptionsUtil';
 
+import Container from '@material-ui/core/Container';
+
+
 const NO_PERMISSION_MSG = 'You have no permission to';
 const CONTACT_ADMIN_MSG = 'please contact with Adminstrator';
 
@@ -113,34 +116,36 @@ function App() {
 
 
   return (
-    <div className="App">
+    <div className=''>
         {userFullName !== '' ? <Header userFullName={userFullName} /> : ''}
 
-      
+        <Container>
+
           
-      <Switch>
-        <Route exact path="/" component={Welcome}/>
-        <Route path="/login" component={Login}/>
-        <Route path="/createAccount" component={createAccount}/>
-        <Route path="/main" component={Main}/>
-        <Route path="/main:/msg" component={Main}/>
+        <Switch>
+          <Route exact path="/" component={Welcome}/>
+          <Route path="/login" component={Login}/>
+          <Route path="/createAccount" component={createAccount}/>
+          <Route path="/main" component={Main}/>
+          <Route path="/main:/msg" component={Main}/>
+          
+          <Route path="/movies/:id" component={Movies}/>
+          <Route path="/movies/" component={Movies}/>
+          <Route path="/addMovie" component={AddMovie}/>
+          <Route path="/movie/:id" component={EditMovie}/>
+
+
+          <Route path="/subscriptions/:id"  component={Members}/>
+          <Route path="/subscriptions/"  component={Members}/>
+          <Route path="/subscription/:id" component={EditMember}/>
+          <Route path="/addMember" component={AddMember}/>
         
-        <Route path="/movies/:id" component={Movies}/>
-        <Route path="/movies/" component={Movies}/>
-        <Route path="/addMovie" component={AddMovie}/>
-        <Route path="/movie/:id" component={EditMovie}/>
 
-
-        <Route path="/subscriptions/:id"  component={Members}/>
-        <Route path="/subscriptions/"  component={Members}/>
-        <Route path="/subscription/:id" component={EditMember}/>
-        <Route path="/addMember" component={AddMember}/>
-       
-
-        <Route path="/users" component={Users}/>
-        <Route path="/addUser" component={AddUser}/>
-        <Route path="/user/:id" component={EditUser}/>
-      </Switch>
+          <Route path="/users" component={Users}/>
+          <Route path="/addUser" component={AddUser}/>
+          <Route path="/user/:id" component={EditUser}/>
+        </Switch>
+      </Container>
      
     </div>
   );

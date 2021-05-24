@@ -33,7 +33,7 @@ function MoviesComp(props) {
 
     return (
         
-      <div className="App">
+      <div className='movies services'>
         <MovieMenu/>
 
         {

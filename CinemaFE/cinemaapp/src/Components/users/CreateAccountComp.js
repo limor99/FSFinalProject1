@@ -32,7 +32,7 @@ function CreateAccountComp() {
         }
     }
     return (
-        <div>
+        <div className='App'>
             <h1>Create your Account</h1>
             <form onSubmit={e => createAccount(e)}>
             username <br/>

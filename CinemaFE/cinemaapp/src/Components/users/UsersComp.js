@@ -9,7 +9,7 @@ function UsersComp() {
     const msg = useSelector(state => state.msg);
 
     return (
-        <div>
+        <div className='users services'>
             {console.log(users.legnth)}
             <UserMenu/>
             <h1>All Users</h1>

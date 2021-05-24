@@ -13,7 +13,7 @@ function MainComp(props) {
   }, [])
 
  return (
-    <div className="App">
+    <div className='main'>
       
       <h1>Main page</h1>
 
