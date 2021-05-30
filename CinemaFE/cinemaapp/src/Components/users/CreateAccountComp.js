@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import usersUtil from '../../Utils/usersUtil';
+import './CreateAccountComp.css';
 
 
 function CreateAccountComp() {
@@ -33,16 +34,18 @@ function CreateAccountComp() {
     }
     return (
         <div className='App'>
-            <h1>Create your Account</h1>
-            <form onSubmit={e => createAccount(e)}>
-            username <br/>
-                <input type="text" value={username} name="username" onChange={(e) => setUsername(e.target.value)}></input><br/>
-                password <br/>
-                <input type="text" value={password} name="password" onChange={(e) => setPassword(e.target.value)}></input><br/>
-                <input type="submit"/>
-                <br/>
-                {msg}
-          </form>
+            <h1>Create your MovieX Account</h1>
+            {msg}
+            <div className='createAccountForm'>
+                <form onSubmit={e => createAccount(e)}>
+                    <input type="text" className='roundedField' value={username} name="username" placeholder='Username' onChange={(e) => setUsername(e.target.value)}></input><br/>
+                    <input type="text" className='roundedField' value={password} name="password" placeholder='Password' onChange={(e) => setPassword(e.target.value)}></input><br/>
+                    <input type="submit" value='Create account' className='roundedBtn'/>
+                    <br/>
+                    
+            </form>
+         </div>
+         
             
         </div>
     )

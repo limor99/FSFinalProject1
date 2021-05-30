@@ -13,11 +13,11 @@ function MainComp(props) {
   }, [])
 
  return (
-    <div className='main'>
+    <div className='App main'>
       
-      <h1>Main page</h1>
-
       {msg}
+      <br/>
+      Diagrams and graph are comin soon....
     </div>
   );
 }
