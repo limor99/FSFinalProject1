@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import Header from '../Components/HeaderComp';
+import Header from './HeaderComp';
 
 function MainComp(props) {
-  const [msg, setMsg] = useState('Choose Action')
+  const [msg, setMsg] = useState('Choose Action');
+  const userFullName = useSelector(state => state.userFullName);
   
   useEffect(() => {
     if( props.location.state !== undefined){
@@ -14,10 +16,11 @@ function MainComp(props) {
 
  return (
     <div className='App main'>
+      {userFullName !== '' ? <Header userFullName={userFullName} /> : ''}
       
       {msg}
       <br/>
-      Diagrams and graph are comin soon....
+      Diagrams and graph are coming soon....
     </div>
   );
 }

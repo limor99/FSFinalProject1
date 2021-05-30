@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import usersUtil from '../Utils/usersUtil';
 
@@ -11,6 +11,9 @@ function LoginComp(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [msg, setMsg] = useState('');
+
+    const userFullName = useSelector(state => state.userFullName);
+
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -34,12 +37,18 @@ function LoginComp(props) {
           const permissions = resp.permissions;
           sessionStorage.setItem('permissions', permissions);
 
-          history.push("/main");    
+          history.push("/main"); 
       }
       else{
           setMsg(resp.message);
       }
     }
+
+    useEffect(() => {
+      if(userFullName !== ''){
+        history.push("/main");
+      }
+    })
 
    
     

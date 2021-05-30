@@ -44,7 +44,7 @@ function App() {
   const moviesSubscribers = useSelector(state => state.moviesSubscribers)
 
   const dispatch = useDispatch();
-  const userFullName = useSelector(state => state.userFullName);
+  
 
   useEffect(() => {
     // Using an IIFE
@@ -117,7 +117,7 @@ function App() {
 
   return (
     <div className=''>
-        {userFullName !== '' ? <Header userFullName={userFullName} /> : ''}
+        
 
         <Container>
 
