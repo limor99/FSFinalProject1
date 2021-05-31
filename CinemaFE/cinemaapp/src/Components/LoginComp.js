@@ -12,7 +12,7 @@ function LoginComp(props) {
     const [password, setPassword] = useState('');
     const [msg, setMsg] = useState('');
 
-    const userFullName = useSelector(state => state.userFullName);
+    const userFullName = localStorage.getItem('userFullName');//useSelector(state => state.userFullName);
 
     const history = useHistory();
     const dispatch = useDispatch();
@@ -28,11 +28,15 @@ function LoginComp(props) {
       
       if(resp.success){
           sessionStorage.setItem("id", resp.token);
+
+          let userFullName = resp.userFullName;
                    
           dispatch({
             type : "updateUserFullName",
-            payload : resp.userFullName
+            payload : userFullName
           });
+          
+          localStorage.setItem('userFullName', userFullName);
 
           const permissions = resp.permissions;
           sessionStorage.setItem('permissions', permissions);
@@ -44,14 +48,6 @@ function LoginComp(props) {
       }
     }
 
-    useEffect(() => {
-      if(userFullName !== ''){
-        history.push("/main");
-      }
-    })
-
-   
-    
     return (
         
       <div className='App loginPage'>

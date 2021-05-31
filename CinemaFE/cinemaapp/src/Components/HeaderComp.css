@@ -1,3 +1,17 @@
 li{
     display: inline-block;
 }
+
+.menu {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.logout{
+    display: flex;
+    flex-wrap:wrap;
+    justify-content: center;
+    align-content: center;
+
+}
