@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import MovieComp from './MovieComp';
 import MovieMenu from './menu/MovieMenu';
+import { Grid } from '@material-ui/core';
 
 function MoviesComp(props) {
     const movies = useSelector( state => state.movies);
@@ -34,25 +35,39 @@ function MoviesComp(props) {
     return (
         
       <div className='movies services'>
-        <MovieMenu/>
-
-        {
-            !hasPermission ? 
-            <div>You have no permission to view movies</div>
-            :
-            <div>
-                <input type="text"  onChange={e => search(e)}></input>
-         
-                All Movies:
-
-                {    
-                    movieResult.map(movie =>{
-                        return <MovieComp key={movie._id} movie={movie}/>
-                    })
-                }
-            </div>
-        }
-
+          <Grid container direction="column" justify="flex-start" spacing={2}>
+              <Grid item xs={12} className='menuLine'>
+                  <Grid container justify="flex-start" alignItems="center"  >
+                      <Grid item>
+                          <MovieMenu/>
+                      </Grid>
+                      <Grid item>
+                          <input type="text"  onChange={e => search(e)}></input>
+                      </Grid>
+                </Grid>
+              </Grid>
+        
+            
+            {
+                
+                !hasPermission ? 
+                <Grid item xs={12}>
+                    <div>You have no permission to view movies</div>
+                </Grid>
+                :
+                <Grid item xs={12} className='MoviesBoxes'>
+                    <Grid container direction='row' justify="flex-start" alignItems="stretch" spacing={2} className='startAllMovies'>
+                        {    
+                            movieResult.map(movie =>{
+                                return <MovieComp key={movie._id} movie={movie}/>
+                            })
+                        }
+                    </Grid>
+                </Grid>
+               
+            }
+            
+        </Grid>
     </div>
     
     );

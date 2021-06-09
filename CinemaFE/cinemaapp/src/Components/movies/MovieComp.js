@@ -8,6 +8,14 @@ import moment from 'moment';
 
 import './MovieComp.css';
 import moviesUtil from '../../Utils/movieUtil';
+import { Grid } from '@material-ui/core';
+import Card from '@material-ui/core/Paper';
+import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
+
+
+import { green } from '@material-ui/core/colors';
+
 
 
 function MovieComp(props) {
@@ -38,36 +46,76 @@ function MovieComp(props) {
     }
 
     return (
-        <div className="movie">
-            name: {props.movie.name} <br/>
-            year: {props.movie.premiered.slice(0, 4)} <br/>
-            genres: {props.movie.genres.join()} <br/>
-            image: <img className="imgSize" src={props.movie.image.medium} alt={props.movie.name}/> <br/>
-            {
-                 movieSubscribers.length === 0 ?
-                 <div>There are no subscribers for this movie</div>
-                 :
-                 <ul>
-                 {
-                     movieSubscribers.map(ms => {
-                         return <li className='listElement' key={ms.id}><Link to={`/subscriptions/${ms.id}`}>{members.filter(m => m._id === ms.id)[0].name}</Link>, {moment(ms.dateWatched).format('YYYY')}</li>
-                     })
-                 }
-                 </ul>
-            }
+        
+            <Grid item xs={12} sm={6} md={4}>
+                <Paper className="movie">
+                    <Grid container direction='column' justify="center" spacing={1}>
+                        <Grid item  sm={12}>
+                            <Grid container justify='flex-start'  alignItems="center">
+                                <Grid item>
+                                    <Box m={1}><img className="imgSize" src={props.movie.image.medium} alt={props.movie.name}/></Box>
+                                </Grid>
+                                <Grid item>
+                                    <Grid container direction='column' className="movieDetails">
+                                        <Grid item>
+                                            {props.movie.name} 
+                                        </Grid>
+                                        <Grid item >
+                                            {props.movie.premiered.slice(0, 4)}
+                                        </Grid>
+                                        <Grid item>
+                                            <div className='genres'>
+                                                {props.movie.genres.join()} 
+                                            </div>
+                                            
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item sm={12}>
+                            {
+                                movieSubscribers.length === 0 ?
+                                <Box className='subscribersList'>
+                                    <ul  className='subscribersNameList'>
+                                        <li className="movieDetails">There are no subscribers for this movie</li>
+                                    </ul>
+                               </Box>
+                                :
+                                <Box className='subscribersList'>
+                                    <ul className='subscribersNameList'>
+                                    {
+                                        movieSubscribers.map(ms => {
+                                            return <li className='listElement' key={ms.id}><Link to={`/subscriptions/${ms.id}`}>{members.filter(m => m._id === ms.id)[0].name}</Link>, <div className='subscriptionDate'>{moment(ms.dateWatched).format('YYYY')}</div></li>
+                                        })
+                                    }
+                                    </ul>
+                                </Box>
+                                
+                            }
+                            
+                        </Grid>
 
-            {
-                hasPermissionToUpdate ?
-                    <Button color="primary" variant="outlined"><Link to={`/movie/${props.movie._id}`}>Edit</Link></Button>
-                :
-                <Button color="primary" variant="outlined" disabled><Link to={`/movie/${props.movie._id}`}>Edit</Link></Button>
+                        <Grid item sm={12}>
+                            <Box m={1}>
+                                {
+                                    hasPermissionToUpdate ?
+                                        <Button size="small" color="primary" variant="outlined"><Link to={`/movie/${props.movie._id}`}>Edit</Link></Button>
+                                    :
+                                    <Button size="small" color="primary" variant="outlined" disabled><Link to={`/movie/${props.movie._id}`}>Edit</Link></Button>
 
-            }
-            
-            <input type="button" value="Delete" disabled = {!hasPermissionToDelete} onClick={() => deleteMovie(props.movie._id)}/>
+                                }
+                                <Button size="small" className='deleteBtn' color="primary" variant="outlined" disabled = {!hasPermissionToDelete} >
+                                    <a onClick={() => deleteMovie(props.movie._id)}>Delete</a>
+                                </Button>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </Paper>
+            </Grid>
 
 
-        </div>
+        
     )
 }
 

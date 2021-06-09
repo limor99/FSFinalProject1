@@ -1,13 +1,60 @@
 .movie{
     border: 1px solid red;
+    background-color: black!important;
+    
 }
 
 .imgSize{
-    width: 50px;
-    height: 100px;
+    width: 100px;
+    height: 150px;
+    border-left: 1px solid red;
 }
 
 .TextField{
     color: red!important;
     background-color: white;
 }
+
+.subscribersList{
+    height: 5rem;
+    /*border-right: 1px solid red;*/
+    width: fit-content;
+    overflow-y: auto;
+
+}
+
+.subscribersList::-webkit-scrollbar-track {
+    border: 1px solid #000;
+    padding: 2px 0;
+    background-color: #404040;
+  }
+  
+  .subscribersList::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  .subscribersList::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #737272;
+    border: 1px solid #000;
+  }
+
+.subscribersNameList{
+    margin: auto 1rem;
+}
+
+.movieDetails{
+    color: red!important;
+}
+
+.subscriptionDate{
+    display: inline-block;
+    color: red; 
+}
+
+.genres{
+    width: 100%;
+    word-wrap: break-word;
+}
+
